@@ -1,14 +1,16 @@
 from setuptools import setup, find_packages
+import os
 
 version = '2.5'
 
 setup(name='Products.ExtendedPathIndex',
       version=version,
       description="Zope catalog index for paths",
-      long_description=open("README.txt").read(),
+      long_description=open("README.txt").read() + "\n" + \
+              open(os.path.join("docs", "HiSTORY.txt")).read(),
       classifiers=[
         "Framework :: Zope2",
-        "License :: OSI Approved :: GNU General Public License (GPL)",
+        "License :: OSI Approved :: Zope Public License",
         "Operating System :: OS Independent",
         ],
       keywords='Zope catalog index',
