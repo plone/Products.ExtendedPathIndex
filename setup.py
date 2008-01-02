@@ -7,7 +7,7 @@ setup(name='Products.ExtendedPathIndex',
       version=version,
       description="Zope catalog index for paths",
       long_description=open("README.txt").read() + "\n" + \
-              open(os.path.join("docs", "HiSTORY.txt")).read(),
+              open(os.path.join("docs", "HISTORY.txt")).read(),
       classifiers=[
         "Framework :: Zope2",
         "License :: OSI Approved :: Zope Public License",
