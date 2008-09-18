@@ -1,6 +1,13 @@
 Changelog
 =========
 
+2.4.1 - September 28, 2008
+--------------------------
+
+- Fix typo in setup.py which broke installation of the egg
+  [ree]
+
+  
 
 2.4 - September 11, 2006
 ------------------------
