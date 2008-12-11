@@ -1,4 +1,3 @@
-from common import Dummy
 import os
 import sys
 from os.path import realpath
@@ -9,6 +8,12 @@ sys.path.insert(0, epi_path)
 from ExtendedPathIndex import ExtendedPathIndex
 
 index = ExtendedPathIndex( 'path' )
+
+class Dummy:
+    def __init__(self, path):
+        self.path = path
+    def getPhysicalPath(self):
+        return self.path.split('/')
 
 
 def profile(prof_name, method, args=(), kwargs={}, times=100):
