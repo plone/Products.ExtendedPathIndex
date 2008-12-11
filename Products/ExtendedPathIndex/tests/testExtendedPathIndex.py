@@ -1,14 +1,7 @@
 # Copyright (c) 2004 Zope Corporation and Plone Solutions
 # ZPL 2.1 license
 
-import os, sys
-if __name__ == '__main__':
-    execfile(os.path.join(sys.path[0], 'framework.py'))
-
-from Testing import ZopeTestCase
 from Products.ExtendedPathIndex.tests import epitc
-from Products.ExtendedPathIndex.ExtendedPathIndex import ExtendedPathIndex
-
 
 class TestPathIndex(epitc.PathIndexTestCase):
     """ Test ExtendedPathIndex objects """
@@ -383,6 +376,3 @@ def test_suite():
     suite.addTest(makeSuite(TestPathIndex))
     suite.addTest(makeSuite(TestExtendedPathIndex))
     return suite
-
-if __name__ == '__main__':
-    framework()

@@ -2,7 +2,6 @@ import transaction
 import sys
 import os
 from os.path import realpath
-import math
 
 from ZODB import DB
 from ZODB.FileStorage import FileStorage

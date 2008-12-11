@@ -3,18 +3,14 @@ import transaction
 import sys
 import os
 from os.path import realpath
-import math
 
 from ZODB import DB
 from ZODB.FileStorage import FileStorage
-
-from common import Root, Dummy
 
 NUM_ITER = 500
 
 epi_path = '/'.join(realpath(os.getcwd()).split('/')[:-1])
 sys.path.insert(0, epi_path)
-from ExtendedPathIndex import ExtendedPathIndex
 
 print '\nOpening file storage'
 
