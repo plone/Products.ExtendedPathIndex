@@ -24,7 +24,7 @@ class IndexedAttrsTests(unittest.TestCase):
     def testDefaultIndexedAttrs(self):
         # By default we don't have indexed_attrs at all
         index = self._makeOne('path')
-        self.failIf(hasattr(index, 'indexed_attrs'))
+        self.assertTrue(index.indexed_attrs is None)
     
     def testDefaultIndexSourceNames(self):
         # However, getIndexSourceName returns 'getPhysicalPath'

@@ -45,20 +45,21 @@ class ExtendedPathIndex(PathIndex):
 
     query_options = ("query", "level", "operator", "depth", "navtree",
                                                               "navtree_start")
+    
+    indexed_attrs = None
 
     def __init__(self, id, extra=None, caller=None):
         """ ExtendedPathIndex supports indexed_attrs """
         PathIndex.__init__(self, id, caller)
-
-        def get(o, k, default):
-            if isinstance(o, dict):
-                return o.get(k, default)
-            else:
-                return getattr(o, k, default)
-
-        attrs = get(extra, 'indexed_attrs', None)
+        
+        if isinstance(extra, dict):
+            attrs = extra.get('indexed_attrs', None)
+        else:
+            attrs = getattr(extra, 'indexed_attrs', None)
+        
         if attrs is None:
             return
+        
         if isinstance(attrs, str):
             attrs = attrs.split(',')
         attrs = filter(None, [a.strip() for a in attrs])
@@ -103,24 +104,15 @@ class ExtendedPathIndex(PathIndex):
 
         # PathIndex first checks for an attribute matching its id and
         # falls back to getPhysicalPath only when failing to get one.
-        # The presence of 'indexed_attrs' overrides this behavior and
-        # causes indexing of the custom attribute.
+        # If self.indexed_attrs is not None, it's value overrides this behavior
 
-        attrs = getattr(self, 'indexed_attrs', None)
-        if attrs:
-            index = attrs[0]
-        else:
-            index = self.id
+        attrs = self.indexed_attrs
+        index = attrs is None and self.id or attrs[0]
 
-        f = getattr(obj, index, None)
-        if f is not None:
-            if safe_callable(f):
-                try:
-                    path = f()
-                except AttributeError:
-                    return 0
-            else:
-                path = f
+        path = getattr(obj, index, None)
+        if path is not None:
+            if safe_callable(path):
+                path = path()
 
             if not isinstance(path, (str, tuple)):
                 raise TypeError('path value must be string or tuple '
@@ -132,7 +124,7 @@ class ExtendedPathIndex(PathIndex):
                 return 0
 
         if isinstance(path, (list, tuple)):
-            path = '/'+ '/'.join(path[1:])
+            path = '/' + '/'.join(path[1:])
         comps = filter(None, path.split('/'))
         parent_path = '/' + '/'.join(comps[:-1])
 
@@ -384,14 +376,8 @@ class ExtendedPathIndex(PathIndex):
 
     def getIndexSourceNames(self):
         """ return names of indexed attributes """
-
-        # By default PathIndex advertises getPhysicalPath even
-        # though the logic in index_object is different.
-
-        try:
-            return tuple(self.indexed_attrs)
-        except AttributeError:
-            return ('getPhysicalPath',)
+        attrs = self.indexed_attrs or ('getPhysicalPath',)
+        return tuple(attrs)
 
     index_html = DTMLFile('dtml/index', globals())
     manage_workspace = DTMLFile('dtml/manageExtendedPathIndex', globals())
