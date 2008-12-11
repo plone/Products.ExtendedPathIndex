@@ -1,10 +1,49 @@
 # Copyright (c) 2004 Zope Corporation and Plone Solutions
 # ZPL 2.1 license
 
-from Products.ExtendedPathIndex.tests import epitc
+import unittest
 
-class TestPathIndex(epitc.PathIndexTestCase):
+class Dummy:
+    def __init__(self, path):
+        self.path = path
+    def getPhysicalPath(self):
+        return self.path.split('/')
+
+
+class TestBase(object):
+    def _makeOne(self):
+        from Products.ExtendedPathIndex.ExtendedPathIndex import ExtendedPathIndex
+        return ExtendedPathIndex('path')
+    
+    def _populateIndex(self):
+        for k, v in self._values.items():
+            self._index.index_object( k, v )
+
+
+class TestPathIndex(TestBase, unittest.TestCase):
     """ Test ExtendedPathIndex objects """
+    def setUp(self):
+        self._index = self._makeOne()
+        self._values = {
+            1 : Dummy("/aa/aa/aa/1.html"),
+            2 : Dummy("/aa/aa/bb/2.html"),
+            3 : Dummy("/aa/aa/cc/3.html"),
+            4 : Dummy("/aa/bb/aa/4.html"),
+            5 : Dummy("/aa/bb/bb/5.html"),
+            6 : Dummy("/aa/bb/cc/6.html"),
+            7 : Dummy("/aa/cc/aa/7.html"),
+            8 : Dummy("/aa/cc/bb/8.html"),
+            9 : Dummy("/aa/cc/cc/9.html"),
+            10: Dummy("/bb/aa/aa/10.html"),
+            11: Dummy("/bb/aa/bb/11.html"),
+            12: Dummy("/bb/aa/cc/12.html"),
+            13: Dummy("/bb/bb/aa/13.html"),
+            14: Dummy("/bb/bb/bb/14.html"),
+            15: Dummy("/bb/bb/cc/15.html"),
+            16: Dummy("/bb/cc/aa/16.html"),
+            17: Dummy("/bb/cc/bb/17.html"),
+            18: Dummy("/bb/cc/cc/18.html")
+        }
 
     def testEmpty(self):
         self.assertEqual(self._index.numObjects() ,0)
@@ -27,7 +66,7 @@ class TestPathIndex(epitc.PathIndexTestCase):
         self._populateIndex()
         self.assertEqual(self._index.numObjects(), 18)
 
-        o = epitc.Dummy('/foo/bar')
+        o = Dummy('/foo/bar')
         self._index.index_object(19, o)
         self.assertEqual(self._index.numObjects(), 19)
         self._index.index_object(19, o)
@@ -140,8 +179,30 @@ class TestPathIndex(epitc.PathIndexTestCase):
             self.assertEqual(lst, results)
 
 
-class TestExtendedPathIndex(epitc.ExtendedPathIndexTestCase):
+class TestExtendedPathIndex(TestBase, unittest.TestCase):
     """ Test ExtendedPathIndex objects """
+    def setUp(self):
+        self._index = self._makeOne()
+        self._values = {
+            1 : Dummy("/1.html"),
+            2 : Dummy("/aa/2.html"),
+            3 : Dummy("/aa/aa/3.html"),
+            4 : Dummy("/aa/aa/aa/4.html"),
+            5 : Dummy("/aa/bb/5.html"),
+            6 : Dummy("/aa/bb/aa/6.html"),
+            7 : Dummy("/aa/bb/bb/7.html"),
+            8 : Dummy("/aa"),
+            9 : Dummy("/aa/bb"),
+            10: Dummy("/bb/10.html"),
+            11: Dummy("/bb/bb/11.html"),
+            12: Dummy("/bb/bb/bb/12.html"),
+            13: Dummy("/bb/aa/13.html"),
+            14: Dummy("/bb/aa/aa/14.html"),
+            15: Dummy("/bb/bb/aa/15.html"),
+            16: Dummy("/bb"),
+            17: Dummy("/bb/bb"),
+            18: Dummy("/bb/aa")
+        }
 
     def testIndexIntegrity(self):
         self._populateIndex()
@@ -240,12 +301,12 @@ class TestExtendedPathIndex(epitc.ExtendedPathIndexTestCase):
     def testEmptyFolderDepthOne(self):
         # Shouldn't return folder when we want children of empty folder
         self._values = {
-          1 : epitc.Dummy("/portal/emptyfolder"),
-          2 : epitc.Dummy("/portal/folder"),
-          3 : epitc.Dummy("/portal/folder/document"),
-          4 : epitc.Dummy("/portal/folder/subfolder"),
-          5 : epitc.Dummy("/portal/folder/subfolder/newsitem")
-          }
+            1: Dummy("/portal/emptyfolder"),
+            2: Dummy("/portal/folder"),
+            3: Dummy("/portal/folder/document"),
+            4: Dummy("/portal/folder/subfolder"),
+            5: Dummy("/portal/folder/subfolder/newsitem")
+        }
         self._populateIndex()
         tests = [
             ('/portal/folder'                       ,0,1,0,[3,4]),
@@ -262,12 +323,12 @@ class TestExtendedPathIndex(epitc.ExtendedPathIndexTestCase):
 
     def testSiteMap(self):
         self._values = {
-          1 : epitc.Dummy("/portal/emptyfolder"),
-          2 : epitc.Dummy("/portal/folder"),
-          3 : epitc.Dummy("/portal/folder/document"),
-          4 : epitc.Dummy("/portal/folder/subfolder"),
-          5 : epitc.Dummy("/portal/folder/subfolder/newsitem")
-          }
+            1: Dummy("/portal/emptyfolder"),
+            2: Dummy("/portal/folder"),
+            3: Dummy("/portal/folder/document"),
+            4: Dummy("/portal/folder/subfolder"),
+            5: Dummy("/portal/folder/subfolder/newsitem")
+        }
         self._populateIndex()
         tests = [
             ('/' ,0,1,0,[]),
