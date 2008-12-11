@@ -371,8 +371,5 @@ class TestExtendedPathIndex(epitc.ExtendedPathIndexTestCase):
 
 
 def test_suite():
-    from unittest import TestSuite, makeSuite
-    suite = TestSuite()
-    suite.addTest(makeSuite(TestPathIndex))
-    suite.addTest(makeSuite(TestExtendedPathIndex))
-    return suite
+    import unittest, sys
+    return unittest.findTestCases(sys.modules[__name__])
