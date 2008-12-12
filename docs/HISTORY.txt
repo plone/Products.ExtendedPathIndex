@@ -1,6 +1,13 @@
 Changelog
 =========
 
+2.5 - Unreleased
+----------------
+
+* Cleaned out tests: removing ZTC cruft, turning them into proper unit tests
+  and removing tests that tested other non-index components.
+  [mj]
+
 2.4.1 - September 28, 2008
 --------------------------
 
