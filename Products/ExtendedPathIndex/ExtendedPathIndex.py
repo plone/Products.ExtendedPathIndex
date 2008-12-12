@@ -218,7 +218,7 @@ class ExtendedPathIndex(PathIndex):
             if depth == -1: # Navtrees don't do recursive
                 depth = 1
             # navtree_start cannot be out-of-bounds, start from root
-            if navtree_start >= len(comps):
+            if navtree_start > len(comps):
                 navtree_start = 0
 
         #
