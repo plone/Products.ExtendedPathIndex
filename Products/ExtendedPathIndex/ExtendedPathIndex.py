@@ -232,14 +232,13 @@ class ExtendedPathIndex(PathIndex):
 
         if not comps and depth == -1 and not navtree:
             # Recursive search for everything
-            return IISet(self._unindex.keys())
+            return IISet(self._unindex)
 
         # Make sure that we get depth = 1 if in navtree mode
         # unless specified otherwise
-
         orig_depth = depth
         if depth == -1:
-            depth = 0 or navtree
+            depth = navtree and 1 or 0
 
         # Optimized navtree starting with absolute path
         if absolute_path and navtree and depth == 1 and default_level==0:
