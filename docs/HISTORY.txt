@@ -8,6 +8,11 @@ Changelog
   and removing tests that tested other non-index components.
   [mj]
 
+* Fixed level handling for queries where a (path, level) tuple is passed in
+  instead of using the general level parameter.
+  [mj]
+
+
 2.4.1 - September 28, 2008
 --------------------------
 

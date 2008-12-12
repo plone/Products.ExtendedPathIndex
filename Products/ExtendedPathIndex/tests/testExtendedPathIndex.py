@@ -417,6 +417,8 @@ class TestExtendedPathIndex(TestBase, unittest.TestCase):
             ('/aa'                 ,0,-1,0,range(1,19)), # Should assume that
                                                          # all paths are
                                                          # relevant
+            ((('aa/aa', 1),)       ,0,-1,0,[4,14]) # A (path, level) tuple, 
+                                                   # relative search
         ]
 
         for path, level, depth, navtree, results in tests:

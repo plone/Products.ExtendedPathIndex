@@ -220,7 +220,7 @@ class ExtendedPathIndex(PathIndex):
         # as it is common for all objects anyway and add overhead
         # There is an assumption about catalog/index having
         # the same container as content
-        if default_level == 0:
+        if startlevel == 0:
             indexpath = list(filter(None, self.getPhysicalPath()))
             while min(len(indexpath), len(comps)):
                 if indexpath[0] == comps[0]:
