@@ -218,17 +218,17 @@ class ExtendedPathIndex(PathIndex):
         orig_comps = [''] + comps[:]
         # Optimization - avoid using the root set
         # as it is common for all objects anyway and add overhead
-        # There is an assumption about catalog/index having
-        # the same container as content
+        # There is an assumption about all indexed values having the
+        # same common base path
         if startlevel == 0:
             indexpath = list(filter(None, self.getPhysicalPath()))
-            while min(len(indexpath), len(comps)):
-                if indexpath[0] == comps[0]:
-                    del indexpath[0]
-                    del comps[0]
-                    startlevel += 1
-                else:
+            minlength = min(len(indexpath), len(comps))
+            # Truncate path to first different element
+            for i in xrange(minlength):
+                if indexpath[i] != comps[i]:
                     break
+                startlevel += 1
+            comps = comps[startlevel:]
 
         if len(comps) == 0:
             if depth == -1 and not navtree:
