@@ -230,9 +230,9 @@ class ExtendedPathIndex(PathIndex):
                 startlevel += 1
             comps = comps[startlevel:]
 
-        if len(comps) == 0:
-            if depth == -1 and not navtree:
-                return IISet(self._unindex.keys())
+        if not comps and depth == -1 and not navtree:
+            # Recursive search for everything
+            return IISet(self._unindex.keys())
 
         # Make sure that we get depth = 1 if in navtree mode
         # unless specified otherwise
