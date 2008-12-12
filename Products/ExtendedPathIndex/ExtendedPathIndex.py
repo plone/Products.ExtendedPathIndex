@@ -212,13 +212,23 @@ class ExtendedPathIndex(PathIndex):
             path = path[0]
 
         absolute_path = isinstance(path, basestring) and path.startswith('/')
-
         comps = filter(None, path.split('/'))
-        
+
         if navtree:
             if depth == -1: # Navtrees don't do recursive
                 depth = 1
-            if absolute_path and startlevel == 0 and depth <= 1:
+            # navtree_start cannot be out-of-bounds, start from root
+            if navtree_start >= len(comps):
+                navtree_start = 0
+
+        #
+        # Optimisations
+        #
+        
+        if absolute_path and startlevel == 0 and depth in (0, 1):
+            # We have easy indexes for absolute paths starting at the root where
+            # we are looking for depth 0 or 1 result sets
+            if navtree:
                 # Optimized absolute path navtree and breadcrumbs cases
                 comps = [''] + comps
                 if depth == 1:
@@ -231,9 +241,6 @@ class ExtendedPathIndex(PathIndex):
                     result = IISet()
                     add = lambda x: x is not None and result.insert(x)
                     index = self._index_items
-                # navtree_start cannot be out-of-bounds, start from root
-                if navtree_start >= len(comps):
-                    navtree_start = 0
                 # Collect all results along the path
                 for i in range(len(comps), navtree_start, -1):
                     parent_path = '/'.join(comps[:i]) or '/'
@@ -241,8 +248,16 @@ class ExtendedPathIndex(PathIndex):
                 if depth:
                     result = multiunion(result)
                 return result
+            
+            if depth == 0:
+                # Specific object search
+                res = self._index_items.get(path)
+                return res and IISet([res]) or IISet()
+            else:
+                # Single depth search
+                return self._index_parents.get(path, IISet())
         
-        # Optimization - avoid using the root set
+        # Avoid using the root set
         # as it is common for all objects anyway and add overhead
         # There is an assumption about all indexed values having the
         # same common base path
@@ -256,31 +271,17 @@ class ExtendedPathIndex(PathIndex):
                 startlevel += 1
             comps = comps[startlevel:]
 
-        if not comps and depth == -1 and not navtree:
+        if not comps and depth == -1:
             # Recursive search for everything
             return IISet(self._unindex)
 
         # Make sure that we get depth = 1 if in navtree mode
         # unless specified otherwise
-        orig_depth = depth
         if depth == -1:
-            depth = navtree and 1 or 0
+            depth = 0
 
-        # Specific object search
-        if absolute_path and orig_depth == 0 and default_level == 0:
-            try:
-                return IISet([self._index_items[path]])
-            except KeyError:
-                return IISet()
-        # Single depth search
-        elif absolute_path and orig_depth == 1 and default_level == 0:
-            # only get objects contained in requested folder
-            try:
-                return self._index_parents[path]
-            except KeyError:
-                return IISet()
         # Sitemaps, relative paths, and depth queries
-        elif startlevel >= 0:
+        if startlevel >= 0:
 
             pathset = None # Same as pathindex
             navset  = None # For collecting siblings along the way
