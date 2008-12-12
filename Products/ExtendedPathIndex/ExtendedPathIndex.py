@@ -277,6 +277,8 @@ class ExtendedPathIndex(PathIndex):
 
         # Make sure that we get depth = 1 if in navtree mode
         # unless specified otherwise
+        # Note that after refactoring, it becomes clear that recursive search
+        # has been disabled for non-absolute, non-navtree searches. What gives?
         if depth == -1:
             depth = 0
 
