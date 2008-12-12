@@ -214,8 +214,34 @@ class ExtendedPathIndex(PathIndex):
         absolute_path = isinstance(path, basestring) and path.startswith('/')
 
         comps = filter(None, path.split('/'))
-
-        orig_comps = [''] + comps[:]
+        
+        if navtree:
+            if depth == -1: # Navtrees don't do recursive
+                depth = 1
+            if absolute_path and startlevel == 0 and depth <= 1:
+                # Optimized absolute path navtree and breadcrumbs cases
+                comps = [''] + comps
+                if depth == 1:
+                    # Navtree case, all sibling elements along the path
+                    result = []
+                    add = result.append
+                    index = self._index_parents
+                else:
+                    # Breadcrumbs case, all direct elements along the path
+                    result = IISet()
+                    add = lambda x: x is not None and result.insert(x)
+                    index = self._index_items
+                # navtree_start cannot be out-of-bounds, start from root
+                if navtree_start >= len(comps):
+                    navtree_start = 0
+                # Collect all results along the path
+                for i in range(len(comps), navtree_start, -1):
+                    parent_path = '/'.join(comps[:i]) or '/'
+                    add(index.get(parent_path))
+                if depth:
+                    result = multiunion(result)
+                return result
+        
         # Optimization - avoid using the root set
         # as it is common for all objects anyway and add overhead
         # There is an assumption about all indexed values having the
@@ -240,38 +266,8 @@ class ExtendedPathIndex(PathIndex):
         if depth == -1:
             depth = navtree and 1 or 0
 
-        # Optimized navtree starting with absolute path
-        if absolute_path and navtree and depth == 1 and default_level==0:
-            set_list = []
-            # Insert root element
-            if navtree_start >= len(orig_comps):
-                navtree_start = 0
-            # create a set of parent paths to search
-            for i in range(len(orig_comps), navtree_start, -1):
-                parent_path = '/'.join(orig_comps[:i])
-                parent_path = parent_path and parent_path or '/'
-                try:
-                    set_list.append(self._index_parents[parent_path])
-                except KeyError:
-                    pass
-            return multiunion(set_list)
-        # Optimized breadcrumbs
-        elif absolute_path and navtree and depth == 0 and default_level==0:
-            item_list = IISet()
-            # Insert root element
-            if navtree_start >= len(orig_comps):
-                navtree_start = 0
-            # create a set of parent paths to search
-            for i in range(len(orig_comps), navtree_start, -1):
-                parent_path = '/'.join(orig_comps[:i])
-                parent_path = parent_path and parent_path or '/'
-                try:
-                    item_list.insert(self._index_items[parent_path])
-                except KeyError:
-                    pass
-            return item_list
         # Specific object search
-        elif absolute_path and orig_depth == 0 and default_level == 0:
+        if absolute_path and orig_depth == 0 and default_level == 0:
             try:
                 return IISet([self._index_items[path]])
             except KeyError:
