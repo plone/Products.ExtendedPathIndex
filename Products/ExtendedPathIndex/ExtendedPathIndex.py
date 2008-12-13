@@ -209,9 +209,9 @@ class ExtendedPathIndex(PathIndex):
         """
 
         if isinstance(path, basestring):
-            startlevel = default_level
+            level = default_level
         else:
-            startlevel = int(path[1])
+            level = int(path[1])
             path = path[0]
 
         comps = filter(None, path.split('/'))
@@ -227,7 +227,7 @@ class ExtendedPathIndex(PathIndex):
         # Optimisations
         #
         
-        if startlevel == 0 and depth in (0, 1):
+        if level == 0 and depth in (0, 1):
             # We have easy indexes for absolute paths where
             # we are looking for depth 0 or 1 result sets
             if navtree:
@@ -265,15 +265,15 @@ class ExtendedPathIndex(PathIndex):
         # as it is common for all objects anyway and add overhead
         # There is an assumption about all indexed values having the
         # same common base path
-        if startlevel == 0:
+        if level == 0:
             indexpath = list(filter(None, self.getPhysicalPath()))
             minlength = min(len(indexpath), len(comps))
             # Truncate path to first different element
             for i in xrange(minlength):
                 if indexpath[i] != comps[i]:
                     break
-                startlevel += 1
-            comps = comps[startlevel:]
+                level += 1
+            comps = comps[level:]
 
         if not comps and depth == -1:
             # Recursive search for everything
@@ -289,7 +289,7 @@ class ExtendedPathIndex(PathIndex):
             depth = 0
 
         # Sitemaps, relative paths, and depth queries
-        if startlevel >= 0:
+        if level >= 0:
 
             pathset = None # Same as pathindex
             navset  = None # For collecting siblings along the way
@@ -297,13 +297,13 @@ class ExtendedPathIndex(PathIndex):
 
             if navtree and depth and \
                    self._index.has_key(None) and \
-                   self._index[None].has_key(startlevel):
-                navset = self._index[None][startlevel]
+                   self._index[None].has_key(level):
+                navset = self._index[None][level]
 
-            for level in range(startlevel, startlevel+len(comps) + depth):
-                if level-startlevel < len(comps):
-                    comp = comps[level-startlevel]
-                    if not self._index.has_key(comp) or not self._index[comp].has_key(level): 
+            for i in range(level, level+len(comps) + depth):
+                if i - level < len(comps):
+                    comp = comps[i - level]
+                    if not self._index.has_key(comp) or not self._index[comp].has_key(i): 
                         # Navtree is inverse, keep going even for
                         # nonexisting paths
                         if navtree:
@@ -312,16 +312,16 @@ class ExtendedPathIndex(PathIndex):
                             return IISet()
                     else:
                         pathset = intersection(pathset,
-                                                     self._index[comp][level])
+                                                     self._index[comp][i])
                     if navtree and depth and \
                            self._index.has_key(None) and \
-                           self._index[None].has_key(level+depth):
+                           self._index[None].has_key(i + depth):
                         navset  = union(navset, intersection(pathset,
-                                              self._index[None][level+depth]))
-                if level-startlevel >= len(comps) or navtree:
-                    if self._index.has_key(None) and self._index[None].has_key(level):
+                                              self._index[None][i + depth]))
+                if i - level >= len(comps) or navtree:
+                    if self._index.has_key(None) and self._index[None].has_key(i):
                         depthset = union(depthset, intersection(pathset,
-                                                    self._index[None][level]))
+                                                    self._index[None][i]))
 
             if navtree:
                 return union(depthset, navset) or IISet()
@@ -334,15 +334,13 @@ class ExtendedPathIndex(PathIndex):
             results = IISet()
             for level in range(0,self._depth + 1):
                 ids = None
-                error = 0
-                for cn in range(0,len(comps)):
-                    comp = comps[cn]
+                for i, comp in enumerate(comps):
                     try:
-                        ids = intersection(ids,self._index[comp][level+cn])
+                        ids = intersection(ids,self._index[comp][level + i])
                     except KeyError:
-                        error = 1
-                if error==0:
-                    results = union(results,ids)
+                        break
+                else:
+                    results = union(results, ids)
             return results
 
     def _apply_index(self, request, cid=''):
