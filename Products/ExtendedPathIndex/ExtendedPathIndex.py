@@ -188,7 +188,7 @@ class ExtendedPathIndex(PathIndex):
         level has been passed in with the path.
 
         level >= 0  starts searching at the given level
-        level <  0  not implemented yet
+        level <  0  finds matches at *any* level
         """
 
         if isinstance(path, basestring):
