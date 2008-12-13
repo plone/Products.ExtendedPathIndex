@@ -278,11 +278,10 @@ class ExtendedPathIndex(PathIndex):
 
         if level >= 0:
             pathset  = None # Same as pathindex
-            navset   = None # For collecting siblings along the way
             depthset = None # For limiting depth
 
             if navtree and depth:
-                navset = self._index.get(None, {}).get(level)
+                depthset = self._index.get(None, {}).get(level)
             
             for i, comp in enumerate(comps):
                 # Find all paths that have comp at the given level
@@ -295,9 +294,6 @@ class ExtendedPathIndex(PathIndex):
                 pathset = intersection(pathset, res)
                 
                 if navtree:
-                    if depth:
-                        navset = union(navset, intersection(pathset, 
-                            self._index.get(None, {}).get(i + level + depth)))
                     depthset = union(depthset, intersection(pathset,
                         self._index.get(None, {}).get(i + level)))
             
@@ -308,8 +304,8 @@ class ExtendedPathIndex(PathIndex):
                 depthset = union(depthset, intersection(pathset,
                     self._index.get(None, {}).get(i + level)))
 
-            if navtree: return union(depthset, navset)
-            if depth:   return depthset
+            if navtree or depth:
+                return depthset
             return pathset
 
         else:
