@@ -281,16 +281,15 @@ class ExtendedPathIndex(PathIndex):
             depthset = None # For limiting depth
 
             if navtree and depth:
+                # Initialize with everything at the first level
                 depthset = self._index.get(None, {}).get(level)
             
             for i, comp in enumerate(comps):
                 # Find all paths that have comp at the given level
                 res = self._index.get(comp, {}).get(i + level)
-                if res is None: 
-                    # Non-existing path; navtree is inverse, keep going
+                if res is None: # Non-existing path; navtree is inverse, keep going
                     pathset = IISet()
-                    if not navtree:
-                        return pathset
+                    if not navtree: return pathset
                 pathset = intersection(pathset, res)
                 
                 if navtree:
@@ -304,8 +303,7 @@ class ExtendedPathIndex(PathIndex):
                 depthset = union(depthset, intersection(pathset,
                     self._index.get(None, {}).get(i + level)))
 
-            if navtree or depth:
-                return depthset
+            if navtree or depth: return depthset
             return pathset
 
         else:
