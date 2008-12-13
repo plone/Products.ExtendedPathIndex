@@ -212,6 +212,12 @@ class ExtendedPathIndex(PathIndex):
             level = int(path[1])
             path = path[0]
 
+        if level < 0:
+            # Search at every level, return the union of all results
+            return multiunion(
+                [self.search(path, level, depth, navtree, navtree_start)
+                 for level in xrange(self._depth + 1)])
+
         comps = filter(None, path.split('/'))
 
         if navtree:
@@ -277,56 +283,41 @@ class ExtendedPathIndex(PathIndex):
             # Recursive search for everything
             return IISet(self._unindex)
 
-        if level >= 0:
-            pathset  = None # Same as pathindex
-            depthset = None # For limiting depth
+        pathset  = None # Same as pathindex
+        depthset = None # For limiting depth
 
-            if navtree and depth > 0 and navtree_start <= level:
-                # Initialize with everything at the first level
-                depthset = self._index.get(None, {}).get(level)
+        if navtree and depth > 0 and navtree_start <= level:
+            # Initialize with everything at the first level
+            depthset = self._index.get(None, {}).get(level)
+        
+        for i, comp in enumerate(comps):
+            # Find all paths that have comp at the given level
+            res = self._index.get(comp, {}).get(i + level)
+            if res is None: # Non-existing path; navtree is inverse, keep going
+                pathset = IISet()
+                if not navtree: return pathset
+            pathset = intersection(pathset, res)
             
-            for i, comp in enumerate(comps):
-                # Find all paths that have comp at the given level
-                res = self._index.get(comp, {}).get(i + level)
-                if res is None: # Non-existing path; navtree is inverse, keep going
-                    pathset = IISet()
-                    if not navtree: return pathset
-                pathset = intersection(pathset, res)
-                
-                if navtree and i + level >= navtree_start:
-                    depthset = union(depthset, intersection(pathset,
-                        self._index.get(None, {}).get(i + level)))
-            
-            if depth > 0:
-                for i in xrange(len(comps), len(comps) + depth):
-                    # Searching for children up to depth levels
-                    # Retrieve all objects at this level; their intersection
-                    # with the pathset defines all children at this level
-                    if navtree and i < navtree_start:
-                        continue
-                    depthset = union(depthset, intersection(pathset,
-                        self._index.get(None, {}).get(i + level)))
+            if navtree and i + level >= navtree_start:
+                depthset = union(depthset, intersection(pathset,
+                    self._index.get(None, {}).get(i + level)))
+        
+        if depth > 0:
+            for i in xrange(len(comps), len(comps) + depth):
+                # Searching for children up to depth levels
+                # Retrieve all objects at this level; their intersection
+                # with the pathset defines all children at this level
+                if navtree and i < navtree_start:
+                    continue
+                depthset = union(depthset, intersection(pathset,
+                    self._index.get(None, {}).get(i + level)))
 
-            if navtree or depth > 0: return depthset
-            if depth == 0:
-                # limit the result to items matching exactly
-                pathset = intersection(pathset, 
-                    self._index.get(None, {}).get(len(comps) + level))
-            return pathset
-
-        else:
-            # XXX: this branch does not yet support navtree and depth != -1
-            results = IISet()
-            for level in range(self._depth + 1):
-                ids = None
-                for i, comp in enumerate(comps):
-                    try:
-                        ids = intersection(ids, self._index[comp][level + i])
-                    except KeyError:
-                        break
-                else:
-                    results = union(results, ids)
-            return results
+        if navtree or depth > 0: return depthset
+        if depth == 0:
+            # limit the result to items matching exactly
+            pathset = intersection(pathset, 
+                self._index.get(None, {}).get(len(comps) + level))
+        return pathset
 
     def _apply_index(self, request):
         """ hook for (Z)Catalog
