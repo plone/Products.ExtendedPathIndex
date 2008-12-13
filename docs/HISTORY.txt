@@ -12,6 +12,8 @@ Changelog
   instead of using the general level parameter.
   [mj]
 
+* Refactored and documented the index codebase.
+  [mj]
 
 2.4.1 - September 28, 2008
 --------------------------
