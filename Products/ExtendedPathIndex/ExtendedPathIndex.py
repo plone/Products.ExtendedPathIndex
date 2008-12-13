@@ -282,7 +282,11 @@ class ExtendedPathIndex(PathIndex):
         if not comps and depth == -1:
             # Recursive search for everything
             return IISet(self._unindex)
-
+        
+        #
+        # Core application of the indexes
+        #
+        
         pathset  = None # Same as pathindex
         depthset = None # For limiting depth
 
