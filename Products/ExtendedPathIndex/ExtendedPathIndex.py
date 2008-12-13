@@ -194,6 +194,16 @@ class ExtendedPathIndex(PathIndex):
         than the matched path. depth == 0 means no subitems are included at all,
         with depth == 1 only direct children are included, etc. depth == -1, the
         default, returns all children at any depth.
+        
+        navtree is treated as a boolean; if it evaluates to True, not only the
+        query match is returned, but also each container in the path. If depth
+        is greater than 0, also all siblings of those containers, as well as the
+        siblings of the match are included as well, plus *all* documents at the
+        starting level.
+        
+        navtree_start limits what containers are included in a navtree search.
+        If greater than 0, only containers (and possibly their siblings) at that
+        level and up will be included in the resultset.
 
         """
         if isinstance(path, basestring):
@@ -208,7 +218,7 @@ class ExtendedPathIndex(PathIndex):
             if depth == -1: # Navtrees don't do recursive
                 depth = 1
             # navtree_start cannot be out-of-bounds, start from root
-            if navtree_start > len(comps):
+            if navtree_start > len(comps) + level:
                 navtree_start = 0
 
         #
@@ -280,7 +290,7 @@ class ExtendedPathIndex(PathIndex):
             pathset  = None # Same as pathindex
             depthset = None # For limiting depth
 
-            if navtree and depth:
+            if navtree and depth and navtree_start <= level:
                 # Initialize with everything at the first level
                 depthset = self._index.get(None, {}).get(level)
             
@@ -292,7 +302,7 @@ class ExtendedPathIndex(PathIndex):
                     if not navtree: return pathset
                 pathset = intersection(pathset, res)
                 
-                if navtree:
+                if navtree and i + level >= navtree_start:
                     depthset = union(depthset, intersection(pathset,
                         self._index.get(None, {}).get(i + level)))
             
@@ -300,6 +310,8 @@ class ExtendedPathIndex(PathIndex):
                 # Searching for children up to depth levels
                 # Retrieve all objects at this level; their intersection
                 # with the pathset defines all children at this level
+                if navtree and i < navtree_start:
+                    continue
                 depthset = union(depthset, intersection(pathset,
                     self._index.get(None, {}).get(i + level)))
 

@@ -351,24 +351,26 @@ class TestExtendedPathIndex(TestBase, unittest.TestCase):
         # breadcrumbs back to that level above the root.  The given path
         # will always be included, i.e. start > cur_level -> start = cur_level
         tests = [
-            ('/'                   ,0,1,1,[]),
-            ('/aa'                 ,0,1,1,[8]),
-            ('/aa/aa'              ,0,1,1,[8]),
-            ('/aa/aa/aa'           ,0,1,1,[8]),
-            ('/aa/bb'              ,0,1,1,[8,9]),
-            ('/bb'                 ,0,1,1,[16]),
-            ('/bb/aa'              ,0,1,1,[16,18]),
-            ('/bb/aa'              ,0,1,2,[18]),
-            ('/bb/bb'              ,0,1,1,[16,17]),
-            ('/bb/bb'              ,0,1,2,[17]),
-            ('/bb/bb/bb/12.html'   ,0,1,1,[12,16,17]),
-            ('/bb/bb/bb/12.html'   ,0,1,2,[12,17]),
-            ('/bb/bb/bb/12.html'   ,0,1,3,[12]),
+            ('/'                   ,0,0,1,1,[]),
+            ('/aa'                 ,0,0,1,1,[8]),
+            ('/aa/aa'              ,0,0,1,1,[8]),
+            ('/aa/aa/aa'           ,0,0,1,1,[8]),
+            ('/aa/bb'              ,0,0,1,1,[8,9]),
+            ('/bb'                 ,0,0,1,1,[16]),
+            ('/bb/aa'              ,0,0,1,1,[16,18]),
+            ('/bb/aa'              ,0,0,1,2,[18]),
+            ('/bb/bb'              ,0,0,1,1,[16,17]),
+            ('/bb/bb'              ,0,0,1,2,[17]),
+            ('/bb/bb/bb/12.html'   ,0,0,1,1,[12,16,17]),
+            ('/bb/bb/bb/12.html'   ,0,0,1,2,[12,17]),
+            ('/bb/bb/bb/12.html'   ,0,0,1,3,[12]),
+            ('aa'                  ,0,1,1,1,[18]),
+            ('aa'                  ,0,1,1,2,[]),
             ]
-        for path, depth, navtree, navtree_start, results in tests:
+        for path, depth, level, navtree, navtree_start, results in tests:
             res = self._index._apply_index(
-                {"path": {'query': path,  "depth": depth, "navtree": navtree,
-                                              "navtree_start":navtree_start}})
+                {"path": {'query': path,  "depth": depth, 'level': level,
+                         "navtree": navtree, "navtree_start":navtree_start}})
             lst = list(res[0].keys())
             self.assertEqual(lst,results,
                         '%s != %s Failed on %s start %s'%(
