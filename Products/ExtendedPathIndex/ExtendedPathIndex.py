@@ -178,7 +178,7 @@ class ExtendedPathIndex(PathIndex):
         del self._unindex[docid]
 
     def search(self, path, default_level=0, depth=-1, navtree=0,
-                                                             navtree_start=0):
+               navtree_start=0):
         """
         path is either a string representing a
         relative URL or a part of a relative URL or
@@ -189,8 +189,13 @@ class ExtendedPathIndex(PathIndex):
 
         level >= 0  starts searching at the given level
         level <  0  finds matches at *any* level
-        """
+        
+        depth let's you limit the results to items at most depth levels deeper
+        than the matched path. depth == 0 means no subitems are included at all,
+        with depth == 1 only direct children are included, etc. depth == -1, the
+        default, returns all children at any depth.
 
+        """
         if isinstance(path, basestring):
             level = default_level
         else:
@@ -271,9 +276,7 @@ class ExtendedPathIndex(PathIndex):
         if depth == -1:
             depth = 0
 
-        # Sitemaps, relative paths, and depth queries
         if level >= 0:
-
             pathset = None # Same as pathindex
             navset  = None # For collecting siblings along the way
             depthset = None # For limiting depth
