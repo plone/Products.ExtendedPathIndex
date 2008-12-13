@@ -279,6 +279,8 @@ class ExtendedPathIndex(PathIndex):
         # unless specified otherwise
         # Note that after refactoring, it becomes clear that recursive search
         # has been disabled for non-absolute, non-navtree searches. What gives?
+        # It turns out that 0 == recursive, so for non-absolute searches you no
+        # longer can get exact results.
         if depth == -1:
             depth = 0
 
