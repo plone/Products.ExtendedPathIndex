@@ -277,15 +277,11 @@ class ExtendedPathIndex(PathIndex):
             # Recursive search for everything
             return IISet(self._unindex)
 
-        if depth == -1:
-            # All children under the path, set depth to max
-            depth = self._depth + 1
-
         if level >= 0:
             pathset  = None # Same as pathindex
             depthset = None # For limiting depth
 
-            if navtree and depth and navtree_start <= level:
+            if navtree and depth > 0 and navtree_start <= level:
                 # Initialize with everything at the first level
                 depthset = self._index.get(None, {}).get(level)
             
@@ -301,19 +297,22 @@ class ExtendedPathIndex(PathIndex):
                     depthset = union(depthset, intersection(pathset,
                         self._index.get(None, {}).get(i + level)))
             
-            for i in xrange(len(comps), len(comps) + depth):
-                # Searching for children up to depth levels
-                # Retrieve all objects at this level; their intersection
-                # with the pathset defines all children at this level
-                if navtree and i < navtree_start:
-                    continue
-                depthset = union(depthset, intersection(pathset,
-                    self._index.get(None, {}).get(i + level)))
+            if depth > 0:
+                for i in xrange(len(comps), len(comps) + depth):
+                    # Searching for children up to depth levels
+                    # Retrieve all objects at this level; their intersection
+                    # with the pathset defines all children at this level
+                    if navtree and i < navtree_start:
+                        continue
+                    depthset = union(depthset, intersection(pathset,
+                        self._index.get(None, {}).get(i + level)))
 
-            if navtree or depth: return depthset
-            # depth == 0, so limit the result to items matching exactly
-            return intersection(pathset, 
-                self._index.get(None, {}).get(len(comps) + level))
+            if navtree or depth > 0: return depthset
+            if depth == 0:
+                # limit the result to items matching exactly
+                pathset = intersection(pathset, 
+                    self._index.get(None, {}).get(len(comps) + level))
+            return pathset
 
         else:
             # XXX: this branch does not yet support navtree and depth != -1
