@@ -76,32 +76,6 @@ class ExtendedPathIndex(PathIndex):
         self._index_parents = OOBTree()
         self._index_items = OIBTree()
 
-    def insertEntry(self, comp, id, level, parent_path=None, object_path=None):
-        """Insert an entry.
-
-           parent_path is the path of the parent object
-
-           path is the object path, it is assumed to be unique, i.e. there
-           is a one to one mapping between physical paths and docids.  This
-           will be large, and is only used for breadcrumbs.
-
-           id is the docid
-        """
-
-        PathIndex.insertEntry(self, comp, id, level)
-
-        if parent_path is not None:
-            if not self._index_parents.has_key(parent_path):
-                self._index_parents[parent_path] = IISet()
-
-            self._index_parents[parent_path].insert(id)
-
-        # We make the assumption that a full path corresponds one and only
-        # one object.
-
-        if object_path is not None:
-            self._index_items[object_path] = id
-
     def index_object(self, docid, obj ,threshold=100):
         """ hook for (Z)Catalog """
 
@@ -129,7 +103,6 @@ class ExtendedPathIndex(PathIndex):
         if isinstance(path, (list, tuple)):
             path = '/' + '/'.join(path[1:])
         comps = filter(None, path.split('/'))
-        parent_path = '/' + '/'.join(comps[:-1])
 
         # Make sure we reindex properly when path change
         if self._unindex.has_key(docid) and self._unindex.get(docid) != path:
@@ -138,11 +111,18 @@ class ExtendedPathIndex(PathIndex):
         if not self._unindex.has_key(docid):
             self._length.change(1)
 
-        for i in range(len(comps)):
-            self.insertEntry(comps[i], docid, i)
+        for i, comp in enumerate(comps):
+            self.insertEntry(comp, docid, i)
 
         # Add terminator
-        self.insertEntry(None, docid, len(comps)-1, parent_path, path)
+        self.insertEntry(None, docid, len(comps)-1)
+        
+        # Add full-path indexes, to optimize certain edge cases
+        parent_path = '/' + '/'.join(comps[:-1])
+        if not self._index_parents.has_key(parent_path):
+            self._index_parents[parent_path] = IISet()
+        self._index_parents[parent_path].insert(docid)
+        self._index_items[path] = docid
 
         self._unindex[docid] = path
         return 1
@@ -203,6 +183,9 @@ class ExtendedPathIndex(PathIndex):
         path is either a string representing a
         relative URL or a part of a relative URL or
         a tuple (path,level).
+        
+        default_level specifies the level to use when no more specific
+        level has been passed in with the path.
 
         level >= 0  starts searching at the given level
         level <  0  not implemented yet
@@ -300,7 +283,7 @@ class ExtendedPathIndex(PathIndex):
                    self._index[None].has_key(level):
                 navset = self._index[None][level]
 
-            for i in range(level, level+len(comps) + depth):
+            for i in range(level, level + len(comps) + depth):
                 if i - level < len(comps):
                     comp = comps[i - level]
                     if not self._index.has_key(comp) or not self._index[comp].has_key(i): 
@@ -332,11 +315,11 @@ class ExtendedPathIndex(PathIndex):
 
         else:
             results = IISet()
-            for level in range(0,self._depth + 1):
+            for level in range(self._depth + 1):
                 ids = None
                 for i, comp in enumerate(comps):
                     try:
-                        ids = intersection(ids,self._index[comp][level + i])
+                        ids = intersection(ids, self._index[comp][level + i])
                     except KeyError:
                         break
                 else:
