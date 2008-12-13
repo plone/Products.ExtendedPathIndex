@@ -277,8 +277,8 @@ class ExtendedPathIndex(PathIndex):
             depth = 0
 
         if level >= 0:
-            pathset = None # Same as pathindex
-            navset  = None # For collecting siblings along the way
+            pathset  = None # Same as pathindex
+            navset   = None # For collecting siblings along the way
             depthset = None # For limiting depth
 
             if navtree and depth:
@@ -303,12 +303,9 @@ class ExtendedPathIndex(PathIndex):
                     depthset = union(depthset, intersection(pathset,
                         self._index.get(None, {}).get(i)))
 
-            if navtree:
-                return union(depthset, navset) or IISet()
-            elif depth:
-                return depthset or IISet()
-            else:
-                return pathset or IISet()
+            if navtree: return union(depthset, navset)
+            if depth:   return depthset
+            return pathset
 
         else:
             results = IISet()
