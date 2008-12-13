@@ -329,13 +329,11 @@ class ExtendedPathIndex(PathIndex):
                     results = union(results, ids)
             return results
 
-    def _apply_index(self, request, cid=''):
+    def _apply_index(self, request):
         """ hook for (Z)Catalog
             'request' --  mapping type (usually {"path": "..." }
              additionaly a parameter "path_level" might be passed
              to specify the level (see search())
-
-            'cid' -- ???
         """
 
         record = parseIndexRequest(request,self.id,self.query_options)
