@@ -211,7 +211,6 @@ class ExtendedPathIndex(PathIndex):
             startlevel = int(path[1])
             path = path[0]
 
-        absolute_path = isinstance(path, basestring) and path.startswith('/')
         comps = filter(None, path.split('/'))
 
         if navtree:
@@ -225,8 +224,8 @@ class ExtendedPathIndex(PathIndex):
         # Optimisations
         #
         
-        if absolute_path and startlevel == 0 and depth in (0, 1):
-            # We have easy indexes for absolute paths starting at the root where
+        if startlevel == 0 and depth in (0, 1):
+            # We have easy indexes for absolute paths where
             # we are looking for depth 0 or 1 result sets
             if navtree:
                 # Optimized absolute path navtree and breadcrumbs cases
@@ -249,6 +248,8 @@ class ExtendedPathIndex(PathIndex):
                     result = multiunion(result)
                 return result
             
+            if not path.startswith('/'):
+                path = '/' + path
             if depth == 0:
                 # Specific object search
                 res = self._index_items.get(path)
