@@ -283,25 +283,30 @@ class ExtendedPathIndex(PathIndex):
 
             if navtree and depth:
                 navset = self._index.get(None, {}).get(level)
-
-            for i in range(level, level + len(comps) + depth):
-                if i - level < len(comps):
-                    comp = comps[i - level]
-                    res = self._index.get(comp, {}).get(i)
-                    if res is None: 
-                        # Non-existing path
-                        pathset = IISet()
-                        # Navtree is inverse, keep going even for
-                        # nonexisting paths
-                        if not navtree:
-                            return pathset
-                    pathset = intersection(pathset, res)
-                    if navtree and depth:
+            
+            for i, comp in enumerate(comps):
+                # Find all paths that have comp at the given level
+                res = self._index.get(comp, {}).get(i + level)
+                if res is None: 
+                    # Non-existing path; navtree is inverse, keep going
+                    pathset = IISet()
+                    if not navtree:
+                        return pathset
+                pathset = intersection(pathset, res)
+                
+                if navtree:
+                    if depth:
                         navset = union(navset, intersection(pathset, 
-                            self._index.get(None, {}).get(i + depth)))
-                if i - level >= len(comps) or navtree:
+                            self._index.get(None, {}).get(i + level + depth)))
                     depthset = union(depthset, intersection(pathset,
-                        self._index.get(None, {}).get(i)))
+                        self._index.get(None, {}).get(i + level)))
+            
+            for i in xrange(len(comps), len(comps) + depth):
+                # Searching for children up to depth levels
+                # Retrieve all objects at this level; their intersection
+                # with the pathset defines all children at this level
+                depthset = union(depthset, intersection(pathset,
+                    self._index.get(None, {}).get(i + level)))
 
             if navtree: return union(depthset, navset)
             if depth:   return depthset
