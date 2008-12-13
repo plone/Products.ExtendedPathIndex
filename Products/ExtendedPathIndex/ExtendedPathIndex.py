@@ -367,9 +367,6 @@ class ExtendedPathIndex(PathIndex):
         attrs = self.indexed_attrs or ('getPhysicalPath',)
         return tuple(attrs)
 
-    index_html = DTMLFile('dtml/index', globals())
-    manage_workspace = DTMLFile('dtml/manageExtendedPathIndex', globals())
-
 
 manage_addExtendedPathIndexForm = DTMLFile('dtml/addExtendedPathIndex', globals())
 
