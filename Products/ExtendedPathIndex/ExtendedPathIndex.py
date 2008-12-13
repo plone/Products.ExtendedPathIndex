@@ -277,14 +277,9 @@ class ExtendedPathIndex(PathIndex):
             # Recursive search for everything
             return IISet(self._unindex)
 
-        # Make sure that we get depth = 1 if in navtree mode
-        # unless specified otherwise
-        # Note that after refactoring, it becomes clear that recursive search
-        # has been disabled for non-absolute, non-navtree searches. What gives?
-        # It turns out that 0 == recursive, so for non-absolute searches you no
-        # longer can get exact results.
         if depth == -1:
-            depth = 0
+            # All children under the path, set depth to max
+            depth = self._depth + 1
 
         if level >= 0:
             pathset  = None # Same as pathindex
@@ -316,7 +311,9 @@ class ExtendedPathIndex(PathIndex):
                     self._index.get(None, {}).get(i + level)))
 
             if navtree or depth: return depthset
-            return pathset
+            # depth == 0, so limit the result to items matching exactly
+            return intersection(pathset, 
+                self._index.get(None, {}).get(len(comps) + level))
 
         else:
             results = IISet()

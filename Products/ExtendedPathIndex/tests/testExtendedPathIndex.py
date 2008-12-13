@@ -386,6 +386,7 @@ class TestExtendedPathIndex(TestBase, unittest.TestCase):
             ('/bb'                 ,0,-1,0,[10,11,12,13,14,15,16,17,18]),
             ('/bb/aa'              ,0,-1,0,[13,14,18]),
             ('/bb/bb'              ,0,-1,0,[11,12,15,17]),
+            ('aa'                  ,1,-1,0,[3,4,13,14,18]),
         ]
 
         for path, level, depth, navtree, results in tests:
