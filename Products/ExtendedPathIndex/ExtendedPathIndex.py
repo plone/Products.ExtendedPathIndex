@@ -281,33 +281,27 @@ class ExtendedPathIndex(PathIndex):
             navset  = None # For collecting siblings along the way
             depthset = None # For limiting depth
 
-            if navtree and depth and \
-                   self._index.has_key(None) and \
-                   self._index[None].has_key(level):
-                navset = self._index[None][level]
+            if navtree and depth:
+                navset = self._index.get(None, {}).get(level)
 
             for i in range(level, level + len(comps) + depth):
                 if i - level < len(comps):
                     comp = comps[i - level]
-                    if not self._index.has_key(comp) or not self._index[comp].has_key(i): 
+                    res = self._index.get(comp, {}).get(i)
+                    if res is None: 
+                        # Non-existing path
+                        pathset = IISet()
                         # Navtree is inverse, keep going even for
                         # nonexisting paths
-                        if navtree:
-                            pathset = IISet()
-                        else:
-                            return IISet()
-                    else:
-                        pathset = intersection(pathset,
-                                                     self._index[comp][i])
-                    if navtree and depth and \
-                           self._index.has_key(None) and \
-                           self._index[None].has_key(i + depth):
-                        navset  = union(navset, intersection(pathset,
-                                              self._index[None][i + depth]))
+                        if not navtree:
+                            return pathset
+                    pathset = intersection(pathset, res)
+                    if navtree and depth:
+                        navset = union(navset, intersection(pathset, 
+                            self._index.get(None, {}).get(i + depth)))
                 if i - level >= len(comps) or navtree:
-                    if self._index.has_key(None) and self._index[None].has_key(i):
-                        depthset = union(depthset, intersection(pathset,
-                                                    self._index[None][i]))
+                    depthset = union(depthset, intersection(pathset,
+                        self._index.get(None, {}).get(i)))
 
             if navtree:
                 return union(depthset, navset) or IISet()
