@@ -316,6 +316,7 @@ class ExtendedPathIndex(PathIndex):
                 self._index.get(None, {}).get(len(comps) + level))
 
         else:
+            # XXX: this branch does not yet support navtree and depth != -1
             results = IISet()
             for level in range(self._depth + 1):
                 ids = None
