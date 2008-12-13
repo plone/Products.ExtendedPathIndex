@@ -32,6 +32,9 @@ class ExtendedPathIndex(PathIndex):
     In addition
     
     - there is a terminator (None) signifying the last component in the path
+    
+    - 2 additional indexes map absolute path to either the doc id or doc ids of
+      contained objects. This allows for rapid answering of common queries.
 
     """
 
