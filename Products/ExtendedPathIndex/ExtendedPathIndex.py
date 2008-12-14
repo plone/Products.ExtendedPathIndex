@@ -223,14 +223,16 @@ class ExtendedPathIndex(PathIndex):
         if navtree:
             if depth == -1: # Navtrees don't do recursive
                 depth = 1
-            # navtree_start cannot be out-of-bounds, start from root
-            if navtree_start > len(comps) + level:
-                navtree_start = 0
 
         #
         # Optimisations
         #
         
+        if (navtree and
+            navtree_start >= min(level + len(comps) + depth, self._depth)):
+            # This navtree_start excludes all items that match the depth
+            return IISet()
+
         if level == 0 and depth in (0, 1):
             # We have easy indexes for absolute paths where
             # we are looking for depth 0 or 1 result sets
@@ -313,18 +315,15 @@ class ExtendedPathIndex(PathIndex):
                 depthset = union(depthset, intersection(pathset,
                     self._index.get(None, {}).get(i + level)))
         
-        if depth > 0:
-            start = len(comps)
-            if navtree: start = max(start, navtree_start)
+        if depth >= 0:
+            # Limit results to those that terminate within depth levels
+            start = len(comps) - 1
+            if navtree: start = max(start, (navtree_start - level))
             depthset = multiunion(filter(None, [depthset] + [
                 intersection(pathset, self._index.get(None, {}).get(i + level))
-                for i in xrange(start, start + depth)]))
+                for i in xrange(start, start + depth + 1)]))
 
-        if navtree or depth > 0: return depthset
-        if depth == 0:
-            # limit the result to items matching exactly
-            pathset = intersection(pathset, 
-                self._index.get(None, {}).get(len(comps) + level))
+        if navtree or depth >= 0: return depthset
         return pathset
 
     def _apply_index(self, request):
