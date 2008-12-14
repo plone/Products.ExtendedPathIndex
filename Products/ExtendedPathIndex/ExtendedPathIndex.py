@@ -288,9 +288,9 @@ class ExtendedPathIndex(PathIndex):
         pathset  = None # Same as pathindex
         depthset = None # For limiting depth
 
-        if navtree and depth > 0 and navtree_start <= level:
+        if navtree and depth > 0:
             # Initialize with everything at the first level
-            depthset = self._index.get(None, {}).get(level)
+            depthset = self._index.get(None, {}).get(max(level, navtree_start))
         
         indexedcomps = enumerate(comps)
         if not navtree:
