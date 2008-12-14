@@ -314,14 +314,11 @@ class ExtendedPathIndex(PathIndex):
                     self._index.get(None, {}).get(i + level)))
         
         if depth > 0:
-            for i in xrange(len(comps), len(comps) + depth):
-                # Searching for children up to depth levels
-                # Retrieve all objects at this level; their intersection
-                # with the pathset defines all children at this level
-                if navtree and i < navtree_start:
-                    continue
-                depthset = union(depthset, intersection(pathset,
-                    self._index.get(None, {}).get(i + level)))
+            start = len(comps)
+            if navtree: start = max(start, navtree_start)
+            depthset = multiunion(filter(None, [depthset] + [
+                intersection(pathset, self._index.get(None, {}).get(i + level))
+                for i in xrange(start, start + depth)]))
 
         if navtree or depth > 0: return depthset
         if depth == 0:
