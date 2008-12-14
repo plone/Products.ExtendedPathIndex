@@ -292,7 +292,16 @@ class ExtendedPathIndex(PathIndex):
             # Initialize with everything at the first level
             depthset = self._index.get(None, {}).get(level)
         
-        for i, comp in enumerate(comps):
+        indexedcomps = enumerate(comps)
+        if not navtree:
+            # Optimize relative-path searches by starting with the
+            # presumed smaller sets at the end of the path first
+            # We can't do this for the navtree case because it needs
+            # the bigger rootset to include siblings along the way.
+            indexedcomps = list(indexedcomps)
+            indexedcomps.reverse()
+        
+        for i, comp in indexedcomps:
             # Find all paths that have comp at the given level
             res = self._index.get(comp, {}).get(i + level)
             if res is None: # Non-existing path; navtree is inverse, keep going
