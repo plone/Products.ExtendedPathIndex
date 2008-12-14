@@ -88,14 +88,14 @@ class TestPathIndex(TestBase, unittest.TestCase):
         for comp, level, results in tests:
             for path in [comp, "/"+comp, "/"+comp+"/"]:
                 res = self._index._apply_index(
-                                    {"path": {'query': path, "level": level}})
+                    dict(path=dict(query=path, level=level)))
                 lst = list(res[0].keys())
                 self.assertEqual(lst, results)
 
         for comp, level, results in tests:
             for path in [comp, "/"+comp, "/"+comp+"/"]:
                 res = self._index._apply_index(
-                                    {"path": {'query': ((path, level),)}})
+                    dict(path=dict(query=path, level=level)))
                 lst = list(res[0].keys())
                 self.assertEqual(lst, results)
 
