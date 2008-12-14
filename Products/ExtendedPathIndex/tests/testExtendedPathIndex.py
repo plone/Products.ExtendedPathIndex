@@ -83,19 +83,14 @@ class TestPathIndex(TestBase, unittest.TestCase):
 
     def testRoot(self):
         self._populateIndex()
-
-        for path in ['/', '//', '///']:
-            # Test with the level passed in as separate parameter
-            res = self._index._apply_index(
-                dict(path=dict(query=path, level=0)))
-            lst = list(res[0].keys())
-            self.assertEqual(lst, range(1,19))
-
-            # Test with the level passed in as part of the path parameter
-            res = self._index._apply_index(
-                dict(path=dict(query=((path, level),)))
-            lst = list(res[0].keys())
-            self.assertEqual(lst, results)
+        
+        queries = (
+            dict(path=dict(query='/', level=0)),
+            dict(path=(('/', 0),)),
+        )
+        for q in queries:
+            res = self._index._apply_index(q)
+            self.assertEqual(list(res[0].keys()), range(1,19))
 
     def testSimpleTests(self):
         self._populateIndex()
