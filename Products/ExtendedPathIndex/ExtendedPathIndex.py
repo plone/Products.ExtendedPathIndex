@@ -237,23 +237,21 @@ class ExtendedPathIndex(PathIndex):
             if navtree:
                 # Optimized absolute path navtree and breadcrumbs cases
                 comps = [''] + comps
+                result = []
+                add = lambda x: x is not None and result.append(x)
                 if depth == 1:
                     # Navtree case, all sibling elements along the path
-                    result = []
-                    add = result.append
+                    convert = multiunion
                     index = self._index_parents
                 else:
                     # Breadcrumbs case, all direct elements along the path
-                    result = IISet()
-                    add = lambda x: x is not None and result.insert(x)
+                    convert = IISet
                     index = self._index_items
                 # Collect all results along the path
                 for i in range(len(comps), navtree_start, -1):
                     parent_path = '/'.join(comps[:i]) or '/'
                     add(index.get(parent_path))
-                if depth:
-                    result = multiunion(result)
-                return result
+                return convert(result)
             
             if not path.startswith('/'):
                 path = '/' + path
