@@ -137,42 +137,32 @@ class ExtendedPathIndex(PathIndex):
             return
 
         # There is an assumption that paths start with /
-        path = self._unindex[docid]
-        if not path.startswith('/'):
-            path = '/'+path
-        comps =  path.split('/')
-        parent_path = '/'.join(comps[:-1])
+        comps = filter(None, self._unindex[docid].split('/'))
 
-        def unindex(comp, level, docid=docid, parent_path=None,
-                                                            object_path=None):
-            try:
-                self._index[comp][level].remove(docid)
+        def unindex(comp, level, docid=docid):
+            self._index[comp][level].remove(docid)
+            if not self._index[comp][level]:
+                del self._index[comp][level]
+            if not self._index[comp]:
+                del self._index[comp]
 
-                if not self._index[comp][level]:
-                    del self._index[comp][level]
-
-                if not self._index[comp]:
-                    del self._index[comp]
-                # Remove parent_path and object path elements
-                if parent_path is not None:
-                    self._index_parents[parent_path].remove(docid)
-                    if not self._index_parents[parent_path]:
-                        del self._index_parents[parent_path]
-                if object_path is not None:
-                    del self._index_items[object_path]
-            except KeyError:
-                logger.log(logging.INFO,
-                           'Attempt to unindex object with id '
-                           '%s failed' % docid)
-
-        for level in range(len(comps[1:])):
-            comp = comps[level+1]
-            unindex(comp, level)
-
-        # Remove the terminator
-        level = len(comps[1:])
-        comp = None
-        unindex(comp, level-1, parent_path=parent_path, object_path=path)
+        try:
+            for level, comp in enumerate(comps):
+                unindex(comp, level)
+            
+            # Remove the terminator
+            unindex(None, len(comps) - 1)
+            
+            # Remove full-path indexes
+            parent_path = '/' + '/'.join(comps[:-1])
+            self._index_parents[parent_path].remove(docid)
+            if not self._index_parents[parent_path]:
+                del self._index_parents[parent_path]
+            del self._index_items['/'.join([parent_path, comps[-1]])]
+        except KeyError:
+            logger.log(logging.INFO,
+                       'Attempt to unindex object with id '
+                       '%s failed' % docid)
 
         self._length.change(-1)
         del self._unindex[docid]
