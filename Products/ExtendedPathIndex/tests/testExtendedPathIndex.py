@@ -112,21 +112,17 @@ class TestPathIndex(TestBase, unittest.TestCase):
             ("cc/18.html", 2, [18]),
         ]
 
-        # Test with the level passed in as separate parameter
         for comp, level, results in tests:
             for path in [comp, "/"+comp, "/"+comp+"/"]:
+                # Test with the level passed in as separate parameter
                 res = self._index._apply_index(dict(path=
                     dict(query=path, level=level)))
-                lst = list(res[0].keys())
-                self.assertEqual(lst, results)
+                self.assertEqual(list(res[0].keys()), results)
 
-        # Test with the level passed in as part of the path parameter
-        for comp, level, results in tests:
-            for path in [comp, "/"+comp, "/"+comp+"/"]:
+                # Test with the level passed in as part of the path parameter
                 res = self._index._apply_index(dict(path=
                     dict(query=((path, level),))))
-                lst = list(res[0].keys())
-                self.assertEqual(lst, results)
+                self.assertEqual(list(res[0].keys()), results)
 
     def testComplexOrTests(self):
         self._populateIndex()
