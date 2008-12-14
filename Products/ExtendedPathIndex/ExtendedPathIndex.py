@@ -341,8 +341,7 @@ class ExtendedPathIndex(PathIndex):
 
         level    = record.get("level", 0)
         operator = record.get('operator', self.useOperator).lower()
-        depth    = getattr(record, 'depth', -1) # Set to 0 or navtree later
-                                                # use getattr to get 0 value
+        depth    = getattr(record, 'depth', -1) # use getattr to get 0 value
         navtree  = record.get('navtree', 0)
         navtree_start  = record.get('navtree_start', 0)
 
