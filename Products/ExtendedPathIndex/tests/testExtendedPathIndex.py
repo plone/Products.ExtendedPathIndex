@@ -49,7 +49,7 @@ class TestPathIndex(TestBase, unittest.TestCase):
         self.assertEqual(self._index.numObjects() ,0)
         self.assertEqual(self._index.getEntryForObject(1234), None)
         self._index.unindex_object( 1234 ) # nothrow
-        self.assertEqual(self._index._apply_index({"suxpath": "xxx"}), None)
+        self.assertEqual(self._index._apply_index(dict(suxpath="xxx")), None)
 
     def testUnIndex(self):
         self._populateIndex()
