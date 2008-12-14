@@ -81,45 +81,21 @@ class TestPathIndex(TestBase, unittest.TestCase):
         self._index._unindex[1] = "/broken/thing"
         self._index.unindex_object(1)
 
-    def testRoot_1(self):
+    def testRoot(self):
         self._populateIndex()
-        tests = ( ("/", 0, range(1,19)), )
 
-        # Test with the level passed in as separate parameter
-        for comp, level, results in tests:
-            for path in [comp, "/"+comp, "/"+comp+"/"]:
-                res = self._index._apply_index(
-                    dict(path=dict(query=path, level=level)))
-                lst = list(res[0].keys())
-                self.assertEqual(lst, results)
+        for path in ['/', '//', '///']:
+            # Test with the level passed in as separate parameter
+            res = self._index._apply_index(
+                dict(path=dict(query=path, level=0)))
+            lst = list(res[0].keys())
+            self.assertEqual(lst, range(1,19))
 
-        # Test with the level passed in as part of the path parameter
-        for comp, level, results in tests:
-            for path in [comp, "/"+comp, "/"+comp+"/"]:
-                res = self._index._apply_index(
-                    dict(path=dict(query=((path, level),)))
-                lst = list(res[0].keys())
-                self.assertEqual(lst, results)
-
-    def testRoot_2(self):
-        self._populateIndex()
-        tests = ( ("/", 0, range(1,19)), )
-
-        # Test with the level passed in as separate parameter
-        for comp,level,results in tests:
-            for path in [comp, "/"+comp, "/"+comp+"/"]:
-                res = self._index._apply_index(
-                    dict(path=dict(query=path, level=level)))
-                lst = list(res[0].keys())
-                self.assertEqual(lst, results)
-
-        # Test with the level passed in as part of the path parameter
-        for comp, level, results in tests:
-            for path in [comp, "/"+comp, "/"+comp+"/"]:
-                res = self._index._apply_index(
-                    dict(path=dict(query=((path, level),)))
-                lst = list(res[0].keys())
-                self.assertEqual(lst, results)
+            # Test with the level passed in as part of the path parameter
+            res = self._index._apply_index(
+                dict(path=dict(query=((path, level),)))
+            lst = list(res[0].keys())
+            self.assertEqual(lst, results)
 
     def testSimpleTests(self):
         self._populateIndex()
