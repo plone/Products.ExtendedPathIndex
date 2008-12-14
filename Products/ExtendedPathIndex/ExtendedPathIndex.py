@@ -5,7 +5,7 @@
 import logging
 
 from Globals import DTMLFile
-from BTrees.IIBTree import IISet, intersection, union, multiunion
+from BTrees.IIBTree import IISet, IITreeSet, intersection, union, multiunion
 from BTrees.OOBTree import OOBTree
 from BTrees.OIBTree import OIBTree
 
@@ -120,7 +120,7 @@ class ExtendedPathIndex(PathIndex):
         # Add full-path indexes, to optimize certain edge cases
         parent_path = '/' + '/'.join(comps[:-1])
         if not self._index_parents.has_key(parent_path):
-            self._index_parents[parent_path] = IISet()
+            self._index_parents[parent_path] = IITreeSet()
         self._index_parents[parent_path].insert(docid)
         self._index_items[path] = docid
 
