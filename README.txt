@@ -56,7 +56,18 @@ Usage
   breadcrumb trail. This includes all parents below the path but stops
   1 level above the root.  The given path is included, even if it is at a
   lower level in the portal than the start parameter would allow.
- 
+
+``catalog(path=dict(query='some/path', level=2))``
+  search for all objects whose path contains some/path at level 2. This 
+  includes paths like /foo/bar/some/path and /spam/eggs/some/path, plus all
+  children of those paths.
+
+``catalog(path=dict(query='some/path', level=-1, depth=0))``
+  search for all objects whose path contains some/path at *any* level. This
+  includes paths like /spam/some/path as well as /foo/bar/baz/some/path, but
+  only those exact matches are included in the result because depth is set to
+  0.
+
 Credits
 =======
 
