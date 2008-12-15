@@ -13,8 +13,8 @@ EPI makes an assumption about the catalog and index being in the
 same container as all the content. This makes a lot of sense in a
 Plone setting, but might not work as expected in other scenarios.
 
-A query like ``/plonesite/folder, start_level=0`` is transformed internally to
-``/folder, start_level=1``. This avoids touching the rather large plonesite set
+A query like ``/plonesite/folder, level=0`` is transformed internally to
+``/folder, level=1``. This avoids touching the rather large plonesite set
 which contains reference to all content in your site.
 
 Features
