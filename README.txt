@@ -30,28 +30,28 @@ Usage
 ``catalog(path='some/path')``
   search for all objects below some/path (recursive, equivalent to depth = -1)
 
-``catalog(path={'query' : 'some/path', 'depth' : 0})``
+``catalog(path=dict(query='some/path', depth=0))``
   search for the object with the given path.
 
-``catalog(path={'query' : 'some/path', 'depth' : 2 )``
+``catalog(path=dict(query='some/path', depth=2))``
   search for all objects below some/path but only down to a depth of 2
 
-``catalog(path={'query' : 'some/path', 'navtree' : 1 )``
+``catalog(path=dict(query='some/path', navtree=True))``
   search for all objects below some/path for rendering a navigation tree. This
   includes all objects below some/path up to a depth of 1 and all parent
   objects.
 
-``catalog(path={'query' : 'some/path', 'navtree' : 1, 'depth': 0 })``
+``catalog(path=dict(query='some/path', navtree=True, depth=0))``
   search for all objects below some/path for rendering a breadcrumb trail.
   This includes only the parent objects themselves.
 
-``catalog(path={'query' : 'some/path', 'navtree':1, 'navtree_start':1})``
+``catalog(path=dict(query='some/path', navtree=True, navtree_start=1))``
   search for all objects below some/path for rendering a partial
   navigation tree. This includes all objects below the path but stops
   1 level above the root.  The given path is included, even if it is at a
-  lower level in the portal than the start parameter would allow.
+  shorter path in the portal than the level parameter would allow.
 
-``catalog(path={'query' : 'some/path', 'navtree':1, 'depth':0, 'navtree_start':1})``
+``catalog(path=dict(query='some/path', navtree=True, depth=0, navtree_start=1))``
   search for all objects below some/path for rendering a partial
   breadcrumb trail. This includes all parents below the path but stops
   1 level above the root.  The given path is included, even if it is at a
@@ -62,7 +62,7 @@ Credits
 
 - Zope Corporation for the initial PathIndex code
 
-- Helge Tesdal from Jarn_ for the ExtendedPathIndex implementation
+- Helge Tesdal and Martijn Pieters from Jarn_ for the ExtendedPathIndex implementation
 
 - Alec Mitchell for the navtree and listing optimizations
 
