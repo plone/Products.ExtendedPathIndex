@@ -27,6 +27,8 @@ class TestPathIndex(TestBase, PathIndexTests):
         super(TestPathIndex, self).setUp()
         self._index = self._makeOne()
 
+# No need for test_suite to pick up the original tests.
+del PathIndexTests
 
 class TestExtendedPathIndex(TestBase, unittest.TestCase):
     """ Test ExtendedPathIndex objects """
