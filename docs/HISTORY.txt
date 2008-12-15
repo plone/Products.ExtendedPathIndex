@@ -12,7 +12,9 @@ Changelog
   instead of using the general level parameter.
   [mj]
 
-* Refactored and documented the index codebase.
+* Refactored and documented the index codebase. Several bugs were discovered 
+  and solved in the process. Missing functionality was also added, all search
+  options should now work across all scenarios.
   [mj]
 
 2.4.1 - September 28, 2008
