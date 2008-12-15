@@ -92,7 +92,7 @@ class TestExtendedPathIndex(TestBase, unittest.TestCase):
             # path, level, expected results
             ('/',         0, [1,8,16]),
             ('/aa',       0, [1,2,8,9,16]),
-            ('/aa',       1, [2,3,9,10,13,17,18]),
+            ('/aa',       1, [1,2,3,8,9,10,13,16,17,18]),
             ('/aa/aa',    0, [1,2,3,8,9,16]),
             ('/aa/aa/aa', 0, [1,2,3,4,8,9,16]),
             ('/aa/bb',    0, [1,2,5,8,9,16]),

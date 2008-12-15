@@ -282,8 +282,10 @@ class ExtendedPathIndex(PathIndex):
         depthset = None # For limiting depth
 
         if navtree and depth > 0:
-            # Initialize with everything at the first level
-            depthset = self._index.get(None, {}).get(max(level, navtree_start))
+            # Include the elements up to the matching path
+            depthset = multiunion([
+                self._index.get(None, {}).get(i, IISet())
+                for i in range(min(navtree_start, level), max(navtree_start, level) + 1)])
         
         indexedcomps = enumerate(comps)
         if not navtree:
