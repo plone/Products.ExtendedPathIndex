@@ -210,9 +210,8 @@ class ExtendedPathIndex(PathIndex):
 
         comps = filter(None, path.split('/'))
 
-        if navtree:
-            if depth == -1: # Navtrees don't do recursive
-                depth = 1
+        if navtree and depth == -1: # Navtrees don't do recursive
+            depth = 1
 
         #
         # Optimisations
