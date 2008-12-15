@@ -217,11 +217,11 @@ class ExtendedPathIndex(PathIndex):
         # Optimisations
         #
         
-        if (navtree and
-            navtree_start > min(level + len(comps) - 1 + depth, self._depth)):
+        pathlength = level + len(comps) - 1
+        if navtree and navtree_start > min(pathlength + depth, self._depth):
             # This navtree_start excludes all items that match the depth
             return IISet()
-        if level + len(comps) - 1 > self._depth:
+        if pathlength > self._depth:
             # Our search is for a path longer than anything in the index
             return IISet()
 
@@ -230,7 +230,6 @@ class ExtendedPathIndex(PathIndex):
             # we are looking for depth 0 or 1 result sets
             if navtree:
                 # Optimized absolute path navtree and breadcrumbs cases
-                comps = [''] + comps
                 result = []
                 add = lambda x: x is not None and result.append(x)
                 if depth == 1:
@@ -242,8 +241,8 @@ class ExtendedPathIndex(PathIndex):
                     convert = IISet
                     index = self._index_items
                 # Collect all results along the path
-                for i in range(len(comps), navtree_start, -1):
-                    parent_path = '/'.join(comps[:i]) or '/'
+                for i in range(len(comps), navtree_start - 1, -1):
+                    parent_path = '/' + '/'.join(comps[:i])
                     add(index.get(parent_path))
                 return convert(result)
             
