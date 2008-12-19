@@ -251,10 +251,10 @@ class ExtendedPathIndex(PathIndex):
             if depth == 0:
                 # Specific object search
                 res = self._index_items.get(path)
-                return res and IISet([res]) or IISet()
+                return res and IISet([res])
             else:
                 # Single depth search
-                return self._index_parents.get(path, IISet())
+                return self._index_parents.get(path)
         
         # Avoid using the root set
         # as it is common for all objects anyway and add overhead
