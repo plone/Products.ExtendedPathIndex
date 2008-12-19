@@ -68,6 +68,10 @@ Usage
   only those exact matches are included in the result because depth is set to
   0.
 
+``catalog(path=dict(query=(('foo/bar', 2), ('bar/baz'), 1), depth=0))``
+  search for multiple paths, each at different levels (foo/bar at level 2,
+  and bar/baz at level 1), and return exact matches only.
+
 Credits
 =======
 
