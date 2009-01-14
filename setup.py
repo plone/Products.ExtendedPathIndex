@@ -21,7 +21,14 @@ setup(name='Products.ExtendedPathIndex',
       namespace_packages=['Products'],
       include_package_data=True,
       zip_safe=False,
+      extras_require=dict(
+        test=[
+            # 'transaction',
+        ]
+      ),
       install_requires=[
           'setuptools',
+          # 'ZODB3',
+          # 'Zope2',
       ],
       )

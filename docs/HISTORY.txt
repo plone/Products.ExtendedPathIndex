@@ -4,6 +4,10 @@ Changelog
 2.6 - Unreleased
 ----------------
 
+* Declare package dependencies and fixed deprecation warnings for use
+  of Globals.
+  [hannosch]
+
 2.5 - December 19, 2008
 -----------------------
 
