@@ -1,6 +1,3 @@
-# Copyright (c) 2004 Zope Corporation and Plone Solutions
-# ZPL 2.1 license
-
 def initialize(context):
     from Products.ExtendedPathIndex.ExtendedPathIndex import ExtendedPathIndex
     from Products.ExtendedPathIndex.ExtendedPathIndex import manage_addExtendedPathIndex

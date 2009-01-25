@@ -1,7 +1,3 @@
-# Copyright (c) 2004 Zope Corporation and Plone Solutions
-
-# ZPL 2.1 license
-
 import logging
 
 from App.special_dtml import DTMLFile

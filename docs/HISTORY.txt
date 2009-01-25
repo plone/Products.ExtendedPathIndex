@@ -4,6 +4,9 @@ Changelog
 2.6 - Unreleased
 ----------------
 
+* Clarified license to be only GPL.
+  [hannosch]
+
 * Declare package dependencies and fixed deprecation warnings for use
   of Globals.
   [hannosch]

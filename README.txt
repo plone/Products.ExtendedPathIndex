@@ -87,5 +87,5 @@ Credits
 License
 =======
 
-This software is released under the ZPL license.
+This software is released under the GPL license.
 

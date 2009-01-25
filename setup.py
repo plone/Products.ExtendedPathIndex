@@ -10,7 +10,8 @@ setup(name='Products.ExtendedPathIndex',
               open(os.path.join("docs", "HISTORY.txt")).read(),
       classifiers=[
         "Framework :: Zope2",
-        "License :: OSI Approved :: Zope Public License",
+        "Environment :: Web Environment"
+        "License :: OSI Approved :: GNU General Public License (GPL)",
         "Operating System :: OS Independent",
         ],
       keywords='Zope catalog index',
