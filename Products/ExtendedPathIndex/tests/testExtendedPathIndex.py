@@ -1,5 +1,8 @@
+import AccessControl # here to avoid cyclic import
+
 import unittest
 from Products.PluginIndexes.PathIndex.tests.testPathIndex import PathIndexTests
+
 
 class Dummy:
     def __init__(self, path):
