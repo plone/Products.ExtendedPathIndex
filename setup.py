@@ -1,13 +1,12 @@
 from setuptools import setup, find_packages
-import os
 
-version = '2.7dev'
+version = '2.7'
 
 setup(name='Products.ExtendedPathIndex',
       version=version,
       description="Zope catalog index for paths",
       long_description=open("README.txt").read() + "\n" + \
-              open(os.path.join("docs", "HISTORY.txt")).read(),
+              open("CHANGES.txt").read(),
       classifiers=[
         "Framework :: Zope2",
         "Environment :: Web Environment",

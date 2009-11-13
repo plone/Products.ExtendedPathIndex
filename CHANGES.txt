@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.7 - unreleased
+2.7 - 2009-11-13
 ----------------
 
 * Added AccessControl import to tests to avoid cyclic import issue in
