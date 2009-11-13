@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-version = '2.7'
+version = '2.8'
 
 setup(name='Products.ExtendedPathIndex',
       version=version,
@@ -16,6 +16,7 @@ setup(name='Products.ExtendedPathIndex',
       keywords='Zope catalog index',
       author='Plone Foundation',
       author_email='plone-developers@lists.sourceforge.net',
+      url='http://svn.plone.org/svn/plone/Products.ExtendedPathIndex',
       license='GPL',
       packages=find_packages(exclude=['ez_setup']),
       namespace_packages=['Products'],
