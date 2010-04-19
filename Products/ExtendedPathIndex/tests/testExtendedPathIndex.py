@@ -15,7 +15,7 @@ class TestBase(object):
     def _makeOne(self):
         from Products.ExtendedPathIndex.ExtendedPathIndex import ExtendedPathIndex
         return ExtendedPathIndex('path')
-    
+
     def _populateIndex(self):
         for k, v in self._values.items():
             self._index.index_object( k, v )
@@ -133,7 +133,7 @@ class TestExtendedPathIndex(TestBase, unittest.TestCase):
     def testNonexistingPaths(self):
         self._populateIndex()
         # With depth 0 we only get the parents
-        # When getting non existing paths, 
+        # When getting non existing paths,
         # we should get as many parents as possible when building navtree
         tests = [
             # path, level, expected results
@@ -276,7 +276,7 @@ class TestExtendedPathIndex(TestBase, unittest.TestCase):
             ('/',             -1, False, range(1,19)), # Depth -1
             ('/aa',           -1, False, range(1,19)), # Should assume that
                                                        # all paths are relevant
-            ((('aa/aa', 1),), -1, False, [4,14]) # A (path, level) tuple, 
+            ((('aa/aa', 1),), -1, False, [4,14]) # A (path, level) tuple,
                                                        # relative search
         ]
 
