@@ -1,7 +1,6 @@
 import AccessControl # here to avoid cyclic import
 
 import unittest
-from Products.PluginIndexes.PathIndex.tests.testPathIndex import PathIndexTests
 
 
 class Dummy:
@@ -13,29 +12,7 @@ class Dummy:
         return self.path.split('/')
 
 
-class TestBase(object):
-
-    def _makeOne(self):
-        from Products.ExtendedPathIndex.ExtendedPathIndex import ExtendedPathIndex
-        return ExtendedPathIndex('path')
-
-    def _populateIndex(self):
-        for k, v in self._values.items():
-            self._index.index_object(k, v)
-
-
-class TestPathIndex(TestBase, PathIndexTests):
-    """ Test ExtendedPathIndex objects """
-
-    def setUp(self):
-        super(TestPathIndex, self).setUp()
-        self._index = self._makeOne()
-
-# No need for test_suite to pick up the original tests.
-del PathIndexTests
-
-
-class TestExtendedPathIndex(TestBase, unittest.TestCase):
+class TestExtendedPathIndex(unittest.TestCase):
     """ Test ExtendedPathIndex objects """
 
     def setUp(self):
@@ -60,6 +37,14 @@ class TestExtendedPathIndex(TestBase, unittest.TestCase):
             17: Dummy("/bb/bb"),
             18: Dummy("/bb/aa"),
         }
+
+    def _makeOne(self, id='path'):
+        from Products.ExtendedPathIndex.ExtendedPathIndex import ExtendedPathIndex
+        return ExtendedPathIndex(id)
+
+    def _populateIndex(self):
+        for k, v in self._values.items():
+            self._index.index_object(k, v)
 
     def testIndexIntegrity(self):
         self._populateIndex()

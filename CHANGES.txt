@@ -4,6 +4,8 @@ Changelog
 2.8 - Unreleased
 ----------------
 
+* No longer depend directly on test internals of PathIndex.
+  [hannosch]
 
 2.7 - 2009-11-13
 ----------------
