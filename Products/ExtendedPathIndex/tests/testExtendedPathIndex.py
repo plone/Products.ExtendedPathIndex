@@ -5,24 +5,28 @@ from Products.PluginIndexes.PathIndex.tests.testPathIndex import PathIndexTests
 
 
 class Dummy:
+
     def __init__(self, path):
         self.path = path
+
     def getPhysicalPath(self):
         return self.path.split('/')
 
 
 class TestBase(object):
+
     def _makeOne(self):
         from Products.ExtendedPathIndex.ExtendedPathIndex import ExtendedPathIndex
         return ExtendedPathIndex('path')
 
     def _populateIndex(self):
         for k, v in self._values.items():
-            self._index.index_object( k, v )
+            self._index.index_object(k, v)
 
 
 class TestPathIndex(TestBase, PathIndexTests):
     """ Test ExtendedPathIndex objects """
+
     def setUp(self):
         super(TestPathIndex, self).setUp()
         self._index = self._makeOne()
@@ -30,8 +34,10 @@ class TestPathIndex(TestBase, PathIndexTests):
 # No need for test_suite to pick up the original tests.
 del PathIndexTests
 
+
 class TestExtendedPathIndex(TestBase, unittest.TestCase):
     """ Test ExtendedPathIndex objects """
+
     def setUp(self):
         self._index = self._makeOne()
         self._values = {
@@ -52,7 +58,7 @@ class TestExtendedPathIndex(TestBase, unittest.TestCase):
             15: Dummy("/bb/bb/aa/15.html"),
             16: Dummy("/bb"),
             17: Dummy("/bb/bb"),
-            18: Dummy("/bb/aa")
+            18: Dummy("/bb/aa"),
         }
 
     def testIndexIntegrity(self):
@@ -201,7 +207,6 @@ class TestExtendedPathIndex(TestBase, unittest.TestCase):
             lst = list(res[0].keys())
             self.assertEqual(lst,results)
 
-
     def testBreadCrumbsWithStart(self):
         self._populateIndex()
         # Adding a navtree_start > 0 to a breadcrumb search should generate
@@ -290,5 +295,6 @@ class TestExtendedPathIndex(TestBase, unittest.TestCase):
 
 
 def test_suite():
-    import unittest, sys
+    import sys
+    import unittest
     return unittest.findTestCases(sys.modules[__name__])
