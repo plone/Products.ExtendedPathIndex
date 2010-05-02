@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.8 - Unreleased
+2.8 - 2010-05-01
 ----------------
 
 * No longer depend directly on test internals of PathIndex.
