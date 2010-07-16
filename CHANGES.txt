@@ -4,6 +4,9 @@ Changelog
 2.9 - Unreleased
 ----------------
 
+* Update license to GPL version 2 only.
+  [hannosch]
+
 2.8 - 2010-05-01
 ----------------
 
