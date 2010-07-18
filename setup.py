@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-version = '2.9'
+version = '3.0'
 
 setup(name='Products.ExtendedPathIndex',
       version=version,
