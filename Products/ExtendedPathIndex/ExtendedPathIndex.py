@@ -103,10 +103,12 @@ class ExtendedPathIndex(PathIndex):
 
         # Make sure we reindex properly when path change
         old_path = self._unindex.get(docid, _marker)
-        if old_path is not _marker and old_path != path:
-            self.unindex_object(docid)
-
-        if docid not in self._unindex:
+        if old_path is not _marker:
+            if old_path != path:
+                self.unindex_object(docid)
+        else:
+            # We only get a new entry if the value wasn't there before.
+            # If it already existed or we replace one, the length is unchanged
             self._length.change(1)
 
         for i, comp in enumerate(comps):
