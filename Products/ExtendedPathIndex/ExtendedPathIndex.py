@@ -106,9 +106,11 @@ class ExtendedPathIndex(PathIndex):
         if old_path is not _marker:
             if old_path != path:
                 self.unindex_object(docid)
+                # unindex reduces length, we need to counter that
+                self._length.change(1)
         else:
             # We only get a new entry if the value wasn't there before.
-            # If it already existed or we replace one, the length is unchanged
+            # If it already existed the length is unchanged
             self._length.change(1)
 
         for i, comp in enumerate(comps):
