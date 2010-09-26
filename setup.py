@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-version = '3.0'
+version = '3.0a1'
 
 setup(name='Products.ExtendedPathIndex',
       version=version,
@@ -31,7 +31,9 @@ setup(name='Products.ExtendedPathIndex',
       ),
       install_requires=[
           'setuptools',
-          # 'ZODB3',
-          # 'Zope2',
+          'AccessControl',
+          'transaction',
+          'ZODB3',
+          'Zope2',
       ],
       )

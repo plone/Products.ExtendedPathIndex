@@ -1,9 +1,11 @@
 Changelog
 =========
 
-3.0 - unreleased
-----------------
+3.0a1 - unreleased
+------------------
 
+* Specify distribution dependencies.
+  [hannosch]
 
 2.9 - 2010-07-18
 ----------------
