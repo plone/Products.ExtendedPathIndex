@@ -102,8 +102,8 @@ class ExtendedPathIndex(PathIndex):
         comps = filter(None, path.split('/'))
 
         # Make sure we reindex properly when path change
-        old_path = self._unindex.get(docid, None)
-        if old_path is not None and old_path != path:
+        old_path = self._unindex.get(docid, _marker)
+        if old_path is not _marker and old_path != path:
             self.unindex_object(docid)
 
         if docid not in self._unindex:
@@ -117,8 +117,8 @@ class ExtendedPathIndex(PathIndex):
 
         # Add full-path indexes, to optimize certain edge cases
         parent_path = '/' + '/'.join(comps[:-1])
-        parents = self._index_parents.get(parent_path, None)
-        if parents is None:
+        parents = self._index_parents.get(parent_path, _marker)
+        if parents is _marker:
             self._index_parents[parent_path] = IITreeSet()
         parents.insert(docid)
         self._index_items[path] = docid
