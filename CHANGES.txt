@@ -4,6 +4,10 @@ Changelog
 3.0a1 - unreleased
 ------------------
 
+* Slightly optimize reindexing an object by passing in information from the
+  index to the unindex method and avoiding another unindex scan.
+  [hannosch]
+
 * Avoid an extra unindex scan for determining length changes in index_object.
   [hannosch]
 

@@ -105,7 +105,7 @@ class ExtendedPathIndex(PathIndex):
         old_path = self._unindex.get(docid, _marker)
         if old_path is not _marker:
             if old_path != path:
-                self.unindex_object(docid)
+                self.unindex_object(docid, _old=old_path)
                 # unindex reduces length, we need to counter that
                 self._length.change(1)
         else:
@@ -130,15 +130,18 @@ class ExtendedPathIndex(PathIndex):
         self._unindex[docid] = path
         return 1
 
-    def unindex_object(self, docid):
+    def unindex_object(self, docid, _old=_marker):
         """ hook for (Z)Catalog """
 
-        old_value = self._unindex.get(docid, _marker)
-        if old_value is _marker:
-            logger.log(logging.INFO,
-                       'Attempt to unindex nonexistent object with id '
-                       '%s' % docid)
-            return
+        if _old is not _marker:
+            old_value = _old
+        else:
+            old_value = self._unindex.get(docid, _marker)
+            if old_value is _marker:
+                logger.log(logging.INFO,
+                           'Attempt to unindex nonexistent object with id '
+                           '%s' % docid)
+                return
 
         # There is an assumption that paths start with /
         comps = filter(None, old_value.split('/'))
