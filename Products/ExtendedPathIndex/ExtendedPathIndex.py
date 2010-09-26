@@ -147,10 +147,11 @@ class ExtendedPathIndex(PathIndex):
         comps = filter(None, old_value.split('/'))
 
         def unindex(comp, level, docid=docid):
-            self._index[comp][level].remove(docid)
-            if not self._index[comp][level]:
-                del self._index[comp][level]
-            if not self._index[comp]:
+            index_comp = self._index[comp]
+            index_comp[level].remove(docid)
+            if not index_comp[level]:
+                del index_comp[level]
+            if not index_comp:
                 del self._index[comp]
 
         try:
