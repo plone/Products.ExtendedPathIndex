@@ -169,7 +169,7 @@ class ExtendedPathIndex(PathIndex):
         del self._unindex[docid]
 
     def search(self, path, default_level=0, depth=-1, navtree=0,
-               navtree_start=0):
+               navtree_start=0, resultset=None):
         """
         path is either a string representing a
         relative URL or a part of a relative URL or
@@ -252,10 +252,10 @@ class ExtendedPathIndex(PathIndex):
             if depth == 0:
                 # Specific object search
                 res = self._index_items.get(path)
-                return res and IISet([res])
+                return res and IISet([res]) or IISet()
             else:
                 # Single depth search
-                return self._index_parents.get(path)
+                return self._index_parents.get(path, IISet())
 
         # Avoid using the root set
         # as it is common for all objects anyway and add overhead
@@ -279,7 +279,7 @@ class ExtendedPathIndex(PathIndex):
         # Core application of the indexes
         #
 
-        pathset  = None # Same as pathindex
+        pathset = resultset # Either None or passed in resultset
         depthset = None # For limiting depth
 
         if navtree and depth > 0:
@@ -321,7 +321,7 @@ class ExtendedPathIndex(PathIndex):
         if navtree or depth >= 0: return depthset
         return pathset
 
-    def _apply_index(self, request):
+    def _apply_index(self, request, resultset=None):
         """ hook for (Z)Catalog
             'request' --  mapping type (usually {"path": "..." }
              additionaly a parameter "path_level" might be passed
@@ -341,13 +341,14 @@ class ExtendedPathIndex(PathIndex):
         if operator == "or":  set_func = union
         else: set_func = intersection
 
-        res = None
+        result = None
         for k in record.keys:
-            rows = self.search(k,level, depth, navtree, navtree_start)
-            res = set_func(res,rows)
+            rows = self.search(k, level, depth, navtree, navtree_start,
+                               resultset=resultset)
+            result = set_func(result, rows)
 
-        if res:
-            return res, (self.id,)
+        if result:
+            return result, (self.id,)
         else:
             return IISet(), (self.id,)
 

@@ -4,6 +4,9 @@ Changelog
 3.0a1 - unreleased
 ------------------
 
+* Merge in optimizations from ``experimental.catalogqueryplan``.
+  [hannosch]
+
 * PEP8 cleanup and minor optimizations in un/index code.
   [hannosch]
 
