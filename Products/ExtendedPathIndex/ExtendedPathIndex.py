@@ -133,8 +133,8 @@ class ExtendedPathIndex(PathIndex):
     def unindex_object(self, docid):
         """ hook for (Z)Catalog """
 
-        old_value = self._unindex.get(docid, None)
-        if old_value is None:
+        old_value = self._unindex.get(docid, _marker)
+        if old_value is _marker:
             logger.log(logging.INFO,
                        'Attempt to unindex nonexistent object with id '
                        '%s' % docid)
