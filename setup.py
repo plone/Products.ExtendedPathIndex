@@ -34,6 +34,6 @@ setup(name='Products.ExtendedPathIndex',
           'AccessControl',
           'transaction',
           'ZODB3',
-          'Zope2',
+          'Zope2 >= 2.13.0a3',
       ],
       )

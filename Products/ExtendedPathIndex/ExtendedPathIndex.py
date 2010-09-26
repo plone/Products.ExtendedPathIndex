@@ -4,9 +4,11 @@ from App.special_dtml import DTMLFile
 from BTrees.IIBTree import IISet, IITreeSet, intersection, union, multiunion
 from BTrees.OOBTree import OOBTree
 from BTrees.OIBTree import OIBTree
+from zope.interface import implements
 
 from Products.PluginIndexes.common.util import parseIndexRequest
 from Products.PluginIndexes.common import safe_callable
+from Products.PluginIndexes.interfaces import ILimitedResultIndex
 from Products.PluginIndexes.PathIndex.PathIndex import PathIndex
 
 _marker = []
@@ -32,8 +34,9 @@ class ExtendedPathIndex(PathIndex):
 
     - 2 additional indexes map absolute path to either the doc id or doc ids of
       contained objects. This allows for rapid answering of common queries.
-
     """
+
+    implements(ILimitedResultIndex)
 
     meta_type = "ExtendedPathIndex"
 
