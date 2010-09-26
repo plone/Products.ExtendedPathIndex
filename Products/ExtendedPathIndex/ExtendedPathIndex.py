@@ -44,10 +44,9 @@ class ExtendedPathIndex(PathIndex):
         {'label': 'Settings', 'action': 'manage_main'},
     )
 
-    query_options = ("query", "level", "operator", "depth", "navtree",
-                                                              "navtree_start")
-
     indexed_attrs = None
+    query_options = ("query", "level", "operator",
+                     "depth", "navtree", "navtree_start")
 
     def __init__(self, id, extra=None, caller=None):
         """ ExtendedPathIndex supports indexed_attrs """
