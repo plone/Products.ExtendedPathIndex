@@ -16,14 +16,14 @@ logger = logging.getLogger('ExtendedPathIndex')
 
 
 class ExtendedPathIndex(PathIndex):
-    """ A path index stores all path components of the physical
-    path of an object:
+    """A path index stores all path components of the physical path of an
+    object.
 
     Internal datastructure (regular pathindex):
 
     - a physical path of an object is split into its components
 
-    - every component is kept as a  key of a OOBTree in self._indexes
+    - every component is kept as a key of a OOBTree in self._indexes
 
     - the value is a mapping 'level of the path component' to
       'all docids with this path component on this level'
