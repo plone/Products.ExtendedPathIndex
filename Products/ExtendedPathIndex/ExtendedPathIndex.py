@@ -41,9 +41,7 @@ class ExtendedPathIndex(PathIndex):
     meta_type = "ExtendedPathIndex"
 
     manage_options= (
-        {'label': 'Settings',
-         'action': 'manage_main',
-         'help': ('ExtendedPathIndex', 'ExtendedPathIndex_Settings.stx')},
+        {'label': 'Settings', 'action': 'manage_main'},
     )
 
     query_options = ("query", "level", "operator", "depth", "navtree",
