@@ -174,12 +174,11 @@ class ExtendedPathIndex(PathIndex):
     def search(self, path, default_level=0, depth=-1, navtree=0,
                navtree_start=0, resultset=None):
         """
-        path is either a string representing a
-        relative URL or a part of a relative URL or
-        a tuple (path,level).
+        path is either a string representing a relative URL or a part of a
+        relative URL or a tuple (path,level).
 
-        default_level specifies the level to use when no more specific
-        level has been passed in with the path.
+        default_level specifies the level to use when no more specific level
+        has been passed in with the path.
 
         level >= 0  starts searching at the given level
         level <  0  finds matches at *any* level
@@ -217,9 +216,7 @@ class ExtendedPathIndex(PathIndex):
         if navtree and depth == -1: # Navtrees don't do recursive
             depth = 1
 
-        #
-        # Optimisations
-        #
+        # Optimizations
 
         pathlength = level + len(comps) - 1
         if navtree and navtree_start > min(pathlength + depth, self._depth):
@@ -278,9 +275,7 @@ class ExtendedPathIndex(PathIndex):
             # Recursive search for everything
             return IISet(self._unindex)
 
-        #
         # Core application of the indexes
-        #
 
         pathset = resultset # Either None or passed in resultset
         depthset = None # For limiting depth
@@ -306,7 +301,8 @@ class ExtendedPathIndex(PathIndex):
             res = self._index.get(comp, {}).get(i + level)
             if res is None: # Non-existing path; navtree is inverse, keep going
                 pathset = IISet()
-                if not navtree: return pathset
+                if not navtree:
+                    return pathset
             pathset = intersection(pathset, res)
 
             if navtree and i + level >= navtree_start:
@@ -316,12 +312,14 @@ class ExtendedPathIndex(PathIndex):
         if depth >= 0:
             # Limit results to those that terminate within depth levels
             start = len(comps) - 1
-            if navtree: start = max(start, (navtree_start - level))
+            if navtree:
+                start = max(start, (navtree_start - level))
             depthset = multiunion(filter(None, [depthset] + [
                 intersection(pathset, self._index.get(None, {}).get(i + level))
                 for i in xrange(start, start + depth + 1)]))
 
-        if navtree or depth >= 0: return depthset
+        if navtree or depth >= 0:
+            return depthset
         return pathset
 
     def _apply_index(self, request, resultset=None):
@@ -331,18 +329,21 @@ class ExtendedPathIndex(PathIndex):
              to specify the level (see search())
         """
 
-        record = parseIndexRequest(request,self.id,self.query_options)
-        if record.keys==None: return None
+        record = parseIndexRequest(request, self.id, self.query_options)
+        if record.keys==None:
+            return None
 
-        level    = record.get("level", 0)
+        level = record.get("level", 0)
         operator = record.get('operator', self.useOperator).lower()
-        depth    = getattr(record, 'depth', -1) # use getattr to get 0 value
-        navtree  = record.get('navtree', 0)
-        navtree_start  = record.get('navtree_start', 0)
+        depth = getattr(record, 'depth', -1) # use getattr to get 0 value
+        navtree = record.get('navtree', 0)
+        navtree_start = record.get('navtree_start', 0)
 
         # depending on the operator we use intersection of union
-        if operator == "or":  set_func = union
-        else: set_func = intersection
+        if operator == "or":
+            set_func = union
+        else:
+            set_func = intersection
 
         result = None
         for k in record.keys:
@@ -351,13 +352,13 @@ class ExtendedPathIndex(PathIndex):
             result = set_func(result, rows)
 
         if result:
-            return result, (self.id,)
+            return (result, (self.id, ))
         else:
-            return IISet(), (self.id,)
+            return (IISet(), (self.id, ))
 
     def getIndexSourceNames(self):
         """ return names of indexed attributes """
-        attrs = self.indexed_attrs or ('getPhysicalPath',)
+        attrs = self.indexed_attrs or ('getPhysicalPath', )
         return tuple(attrs)
 
 manage_addExtendedPathIndexForm = DTMLFile('dtml/addExtendedPathIndex',
