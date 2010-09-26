@@ -4,6 +4,9 @@ Changelog
 3.0a1 - unreleased
 ------------------
 
+* PEP8 cleanup and minor optimizations in un/index code.
+  [hannosch]
+
 * Specify distribution dependencies.
   [hannosch]
 
