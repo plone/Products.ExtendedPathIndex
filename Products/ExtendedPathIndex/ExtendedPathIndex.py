@@ -162,10 +162,11 @@ class ExtendedPathIndex(PathIndex):
 
             # Remove full-path indexes
             parent_path = '/' + '/'.join(comps[:-1])
-            parents = self._index_parents[parent_path]
-            parents.remove(docid)
-            if not parents:
-                del self._index_parents[parent_path]
+            parents = self._index_parents.get(parent_path, _marker)
+            if parents is not _marker:
+                parents.remove(docid)
+                if not parents:
+                    del self._index_parents[parent_path]
             del self._index_items['/'.join([parent_path, comps[-1]])]
         except KeyError:
             logger.log(logging.INFO,
