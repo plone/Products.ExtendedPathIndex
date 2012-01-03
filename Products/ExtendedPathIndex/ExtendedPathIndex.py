@@ -40,7 +40,7 @@ class ExtendedPathIndex(PathIndex):
 
     meta_type = "ExtendedPathIndex"
 
-    manage_options= (
+    manage_options = (
         {'label': 'Settings', 'action': 'manage_main'},
     )
 
@@ -117,7 +117,7 @@ class ExtendedPathIndex(PathIndex):
             self.insertEntry(comp, docid, i)
 
         # Add terminator
-        self.insertEntry(None, docid, len(comps)-1)
+        self.insertEntry(None, docid, len(comps) - 1)
 
         # Add full-path indexes, to optimize certain edge cases
         parent_path = '/' + '/'.join(comps[:-1])
@@ -219,7 +219,7 @@ class ExtendedPathIndex(PathIndex):
 
         comps = filter(None, path.split('/'))
 
-        if navtree and depth == -1: # Navtrees don't do recursive
+        if navtree and depth == -1:  # Navtrees don't do recursive
             depth = 1
 
         # Optimizations
@@ -283,8 +283,8 @@ class ExtendedPathIndex(PathIndex):
 
         # Core application of the indexes
 
-        pathset = resultset # Either None or passed in resultset
-        depthset = None # For limiting depth
+        pathset = resultset  # Either None or passed in resultset
+        depthset = None  # For limiting depth
 
         if navtree and depth > 0:
             # Include the elements up to the matching path
@@ -305,7 +305,8 @@ class ExtendedPathIndex(PathIndex):
         for i, comp in indexedcomps:
             # Find all paths that have comp at the given level
             res = self._index.get(comp, {}).get(i + level)
-            if res is None: # Non-existing path; navtree is inverse, keep going
+            if res is None:
+                # Non-existing path; navtree is inverse, keep going
                 pathset = IISet()
                 if not navtree:
                     return pathset
@@ -336,12 +337,12 @@ class ExtendedPathIndex(PathIndex):
         """
 
         record = parseIndexRequest(request, self.id, self.query_options)
-        if record.keys==None:
+        if record.keys == None:
             return None
 
         level = record.get("level", 0)
         operator = record.get('operator', self.useOperator).lower()
-        depth = getattr(record, 'depth', -1) # use getattr to get 0 value
+        depth = getattr(record, 'depth', -1)  # use getattr to get 0 value
         navtree = record.get('navtree', 0)
         navtree_start = record.get('navtree_start', 0)
 
