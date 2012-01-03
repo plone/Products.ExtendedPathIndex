@@ -124,6 +124,7 @@ class ExtendedPathIndex(PathIndex):
         parents = self._index_parents.get(parent_path, _marker)
         if parents is _marker:
             self._index_parents[parent_path] = IITreeSet()
+            parents = self._index_parents[parent_path]
         parents.insert(docid)
         self._index_items[path] = docid
 

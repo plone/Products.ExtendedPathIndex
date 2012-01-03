@@ -4,6 +4,9 @@ Changelog
 3.0a1 - unreleased
 ------------------
 
+* Fixed TypeError on insert when parent_path is not in the index_parents.
+  [maurits]
+
 * Better protection against corrupted internal data in ``_index_parents``.
   [hannosch]
 
