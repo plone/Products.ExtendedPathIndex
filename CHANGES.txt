@@ -1,8 +1,8 @@
 Changelog
 =========
 
-3.0a1 - unreleased
-------------------
+3.0 - 2012-04-26
+----------------
 
 * Fixed TypeError on insert when parent_path is not in the index_parents.
   [maurits]
