@@ -282,8 +282,7 @@ class ExtendedPathIndex(PathIndex):
             return IISet(self._unindex)
 
         # Core application of the indexes
-
-        pathset = resultset  # Either None or passed in resultset
+        pathset = None
         depthset = None  # For limiting depth
 
         if navtree and depth > 0:

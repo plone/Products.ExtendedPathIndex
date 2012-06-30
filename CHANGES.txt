@@ -1,9 +1,12 @@
 Changelog
 =========
 
-3.1 - unreleased
-----------------
+3.0.1 - unreleased
+------------------
 
+* Fixed depth limited searches, when the path index wasn't the first index
+  in the query plan. Thx to Peter Mathis for reporting the problem.
+  [hannosch]
 
 3.0 - 2012-04-26
 ----------------
