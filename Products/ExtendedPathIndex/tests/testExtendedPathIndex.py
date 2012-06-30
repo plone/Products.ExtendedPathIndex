@@ -1,5 +1,5 @@
-import AccessControl # here to avoid cyclic import
-AccessControl # pyflakes
+import AccessControl  # here to avoid cyclic import
+AccessControl  # pyflakes
 
 import unittest
 
@@ -75,8 +75,8 @@ class TestExtendedPathIndex(unittest.TestCase):
             ]
 
         for depth, results in tests:
-            res = self._index._apply_index(dict(path=
-                dict(query='/', depth=depth)))
+            res = self._index._apply_index(dict(
+                path=dict(query='/', depth=depth)))
             lst = list(res[0].keys())
             self.assertEqual(lst, results)
 
@@ -95,8 +95,8 @@ class TestExtendedPathIndex(unittest.TestCase):
             ('/bb/bb', 0, [1, 8, 10, 11, 16, 17, 18]),
             ]
         for path, level, results in tests:
-            res = self._index._apply_index(dict(path=
-                dict(query=path, level=level, depth=1, navtree=True)))
+            res = self._index._apply_index(dict(
+                path=dict(query=path, level=level, depth=1, navtree=True)))
             lst = list(res[0].keys())
             self.assertEqual(lst, results)
 
@@ -117,8 +117,8 @@ class TestExtendedPathIndex(unittest.TestCase):
             ('/bb/bb/aa', 0, [16, 17]),
             ]
         for path, level, results in tests:
-            res = self._index._apply_index(dict(path=
-                dict(query=path, level=level, depth=0, navtree=True)))
+            res = self._index._apply_index(dict(
+                path=dict(query=path, level=level, depth=0, navtree=True)))
             lst = list(res[0].keys())
             self.assertEqual(lst, results)
 
@@ -130,8 +130,8 @@ class TestExtendedPathIndex(unittest.TestCase):
         tests = [
             # path, level, expected results
             ('/', 0, []),
-            ('/aa', 0, [8]), # Exists
-            ('/aa/x', 0, [8]), # Doesn't exist
+            ('/aa', 0, [8]),  # Exists
+            ('/aa/x', 0, [8]),  # Doesn't exist
             ('/aa', 1, [18]),
             ('/aa/x', 1, [18]),
             ('/aa/aa', 0, [8]),
@@ -140,8 +140,8 @@ class TestExtendedPathIndex(unittest.TestCase):
             ('/aa/bb/x', 0, [8, 9]),
             ]
         for path, level, results in tests:
-            res = self._index._apply_index(dict(path=
-                dict(query=path, level=level, depth=0, navtree=True)))
+            res = self._index._apply_index(dict(
+                path=dict(query=path, level=level, depth=0, navtree=True)))
             lst = list(res[0].keys())
             self.assertEqual(lst, results)
 
@@ -164,8 +164,8 @@ class TestExtendedPathIndex(unittest.TestCase):
             ('/portal/folder/subfolder/newsitem', []),
             ]
         for path, results in tests:
-            res = self._index._apply_index(dict(path=
-                dict(query=path, depth=1)))
+            res = self._index._apply_index(dict(
+                path=dict(query=path, depth=1)))
             lst = list(res[0].keys())
             self.assertEqual(lst, results)
 
@@ -188,8 +188,8 @@ class TestExtendedPathIndex(unittest.TestCase):
             ('/', 6, [1, 2, 3, 4, 5]),
             ]
         for path, depth, results in tests:
-            res = self._index._apply_index(dict(path=
-                dict(query=path, depth=depth)))
+            res = self._index._apply_index(dict(
+                path=dict(query=path, depth=depth)))
             lst = list(res[0].keys())
             self.assertEqual(lst, results)
 
@@ -216,13 +216,13 @@ class TestExtendedPathIndex(unittest.TestCase):
             ('aa', 1, 2, []),
             ]
         for path, level, navtree_start, results in tests:
-            res = self._index._apply_index(dict(path=
-                dict(query=path, level=level, navtree_start=navtree_start,
-                     depth=0, navtree=True)))
+            res = self._index._apply_index(dict(
+                path=dict(query=path, level=level, navtree_start=navtree_start,
+                          depth=0, navtree=True)))
             lst = list(res[0].keys())
             self.assertEqual(
                 lst, results,
-                '%s != %s Failed on %s start %s'%(
+                '%s != %s Failed on %s start %s' % (
                     lst, results, path, navtree_start))
 
     def testNegativeDepthQuery(self):
@@ -240,11 +240,11 @@ class TestExtendedPathIndex(unittest.TestCase):
         ]
 
         for path, level, results in tests:
-            res = self._index._apply_index(dict(path=
-                dict(query=path, level=level)))
+            res = self._index._apply_index(dict(
+                path=dict(query=path, level=level)))
             lst = list(res[0].keys())
             self.assertEqual(lst, results,
-                '%s != %s Failed on %s level %s'%(
+                '%s != %s Failed on %s level %s' % (
                     lst, results, path, level))
 
     def testPhysicalPathOptimization(self):
@@ -254,27 +254,27 @@ class TestExtendedPathIndex(unittest.TestCase):
         # Test a variety of arguments
         tests = [
             # path, depth, navtree, expected results
-            ('/', 1, False, [1, 8, 16]), # Sitemap
-            ('/', 0, True, []), # Non-Existant
-            ('/', 0, True, []), # Breadcrumb tests
+            ('/', 1, False, [1, 8, 16]),  # Sitemap
+            ('/', 0, True, []),  # Non-Existant
+            ('/', 0, True, []),  # Breadcrumb tests
             ('/aa', 0, True, [8]),
             ('/aa/aa', 0, True, [8]),
-            ('/', 1, True, [1, 8, 16]), # Navtree tests
+            ('/', 1, True, [1, 8, 16]),  # Navtree tests
             ('/aa', 1, True, [1, 2, 8, 9, 16]),
             ('/aa/aa', 1, True, [1, 2, 3, 8, 9, 16]),
-            ('/', 0, False, []), # Depth Zero tests
+            ('/', 0, False, []),  # Depth Zero tests
             ('/aa', 0, False, [8]),
             ('/aa/aa', 0, False, []),
-            ('/', -1, False, range(1, 19)), # Depth -1
-            ('/aa', -1, False, range(1, 19)), # Should assume that all
-                                              # paths are relevant
-            ((('aa/aa', 1), ), -1, False, [4, 14]), # A (path, level) tuple,
-                                                    # relative search
+            ('/', -1, False, range(1, 19)),  # Depth -1
+            ('/aa', -1, False, range(1, 19)),  # Should assume that all
+                                               # paths are relevant
+            ((('aa/aa', 1), ), -1, False, [4, 14]),  # A (path, level) tuple,
+                                                     # relative search
         ]
 
         for path, depth, navtree, results in tests:
-            res = self._index._apply_index(dict(path=
-                dict(query=path, depth=depth, navtree=navtree)))
+            res = self._index._apply_index(dict(
+                path=dict(query=path, depth=depth, navtree=navtree)))
             lst = list(res[0].keys())
             self.assertEqual(
                 lst, results,

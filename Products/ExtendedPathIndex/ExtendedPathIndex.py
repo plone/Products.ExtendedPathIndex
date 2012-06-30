@@ -181,7 +181,7 @@ class ExtendedPathIndex(PathIndex):
                navtree_start=0, resultset=None):
         """
         path is either a string representing a relative URL or a part of a
-        relative URL or a tuple (path,level).
+        relative URL or a tuple (path, level).
 
         default_level specifies the level to use when no more specific level
         has been passed in with the path.
