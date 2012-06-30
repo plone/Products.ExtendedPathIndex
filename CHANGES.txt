@@ -1,7 +1,7 @@
 Changelog
 =========
 
-3.0.1 - unreleased
+3.0.1 - 2012-06-30
 ------------------
 
 * Fixed depth limited searches, when the path index wasn't the first index
