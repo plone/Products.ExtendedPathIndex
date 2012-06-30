@@ -3,6 +3,9 @@ AccessControl  # pyflakes
 
 import unittest
 
+from BTrees.IIBTree import IISet
+from BTrees.IIBTree import intersection
+
 
 class Dummy:
 
@@ -65,7 +68,7 @@ class TestExtendedPathIndex(unittest.TestCase):
         self._index._unindex[1] = "/broken/thing"
         self._index.unindex_object(1)
 
-    def testDepthLimit(self):
+    def test_depth_limit(self):
         self._populateIndex()
         tests = [
             # depth, expected result
@@ -78,6 +81,23 @@ class TestExtendedPathIndex(unittest.TestCase):
             res = self._index._apply_index(dict(
                 path=dict(query='/', depth=depth)))
             lst = list(res[0].keys())
+            self.assertEqual(lst, results)
+
+    def test_depth_limit_resultset(self):
+        self._populateIndex()
+        resultset = IISet([1, 2, 3, 4, 8, 16])
+        tests = [
+            # depth, expected result
+            (1, [1, 8, 16]),
+            (2, [1, 2, 8, 16]),
+            (3, [1, 2, 3, 8, 16]),
+            ]
+
+        for depth, results in tests:
+            res = self._index._apply_index(dict(
+                path=dict(query='/', depth=depth)), resultset=resultset)
+            combined = intersection(res[0], resultset)
+            lst = list(combined)
             self.assertEqual(lst, results)
 
     def testDefaultNavtree(self):
