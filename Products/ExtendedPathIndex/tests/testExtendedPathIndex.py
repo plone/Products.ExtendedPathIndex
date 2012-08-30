@@ -158,6 +158,7 @@ class TestExtendedPathIndex(unittest.TestCase):
             ('/aa/aa/x', 0, [8]),
             ('/aa/bb', 0, [8, 9]),
             ('/aa/bb/x', 0, [8, 9]),
+            ('/aa/bb/x/y/z', 0, [8, 9]),
             ]
         for path, level, results in tests:
             res = self._index._apply_index(dict(
