@@ -228,9 +228,6 @@ class ExtendedPathIndex(PathIndex):
         if navtree and navtree_start > min(pathlength + depth, self._depth):
             # This navtree_start excludes all items that match the depth
             return IISet()
-        if pathlength > self._depth:
-            # Our search is for a path longer than anything in the index
-            return IISet()
 
         if level == 0 and depth in (0, 1):
             # We have easy indexes for absolute paths where
