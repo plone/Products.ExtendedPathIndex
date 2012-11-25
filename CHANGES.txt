@@ -4,6 +4,10 @@ Changelog
 3.1 - unreleased
 ----------------
 
+* The behavior is inconsistent, because as long as the input path length is
+  shorter or equal to the longest indexed path, there is no requirement that
+  the entire path is indexed already.
+  [bosim]
 
 3.0.1 - 2012-06-30
 ------------------
