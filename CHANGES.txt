@@ -1,7 +1,7 @@
 Changelog
 =========
 
-3.1 - unreleased
+3.1 (2013-01-01)
 ----------------
 
 * The behavior is inconsistent, because as long as the input path length is
