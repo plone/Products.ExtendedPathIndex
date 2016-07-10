@@ -4,7 +4,8 @@ Changelog
 3.1.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Use zope.interface decorator.
+  [gforcada]
 
 
 3.1 (2013-01-01)
@@ -91,7 +92,7 @@ Changelog
   instead of using the general level parameter.
   [mj]
 
-* Refactored and documented the index codebase. Several bugs were discovered 
+* Refactored and documented the index codebase. Several bugs were discovered
   and solved in the process. Missing functionality was also added, all search
   options should now work across all scenarios.
   [mj]
@@ -102,7 +103,7 @@ Changelog
 - Fix typo in setup.py which broke installation of the egg
   [ree]
 
-  
+
 
 2.4 - September 11, 2006
 ------------------------
@@ -112,7 +113,7 @@ Changelog
   [hannosch]
 
 - Converted log infrastructure to use Python's logging module instead zLOG.
-  [hannosch] 
+  [hannosch]
 
 2.3 - December 18, 2005
 -----------------------

@@ -4,7 +4,7 @@ from App.special_dtml import DTMLFile
 from BTrees.IIBTree import IISet, IITreeSet, intersection, union, multiunion
 from BTrees.OOBTree import OOBTree
 from BTrees.OIBTree import OIBTree
-from zope.interface import implements
+from zope.interface import implementer
 
 from Products.PluginIndexes.common.util import parseIndexRequest
 from Products.PluginIndexes.common import safe_callable
@@ -15,6 +15,7 @@ _marker = []
 logger = logging.getLogger('ExtendedPathIndex')
 
 
+@implementer(ILimitedResultIndex)
 class ExtendedPathIndex(PathIndex):
     """A path index stores all path components of the physical path of an
     object.
@@ -35,8 +36,6 @@ class ExtendedPathIndex(PathIndex):
     - 2 additional indexes map absolute path to either the doc id or doc ids of
       contained objects. This allows for rapid answering of common queries.
     """
-
-    implements(ILimitedResultIndex)
 
     meta_type = "ExtendedPathIndex"
 
