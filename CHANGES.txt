@@ -1,7 +1,7 @@
 Changelog
 =========
 
-3.1.2 (unreleased)
+3.2.0 (unreleased)
 ------------------
 
 Breaking changes:
@@ -10,7 +10,7 @@ Breaking changes:
 
 New features:
 
-- *add item here*
+- Add forward compatibility with ZCatalog 4's IQueryIndex interface.
 
 Bug fixes:
 

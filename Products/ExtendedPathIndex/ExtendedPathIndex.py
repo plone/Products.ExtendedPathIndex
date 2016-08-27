@@ -6,16 +6,26 @@ from BTrees.OOBTree import OOBTree
 from BTrees.OIBTree import OIBTree
 from zope.interface import implementer
 
-from Products.PluginIndexes.common.util import parseIndexRequest
 from Products.PluginIndexes.common import safe_callable
 from Products.PluginIndexes.interfaces import ILimitedResultIndex
 from Products.PluginIndexes.PathIndex.PathIndex import PathIndex
+
+# Forward compatibility with ZCatalog 4.0
+try:
+    from Products.ZCatalog.query import IndexQuery
+    from Products.PluginIndexes.interfaces import IQueryIndex
+except ImportError:
+    from zope.interface import Interface
+    from Products.PluginIndexes.common.util import \
+        parseIndexRequest as IndexQuery
+    IQueryIndex = Interface
+
 
 _marker = []
 logger = logging.getLogger('ExtendedPathIndex')
 
 
-@implementer(ILimitedResultIndex)
+@implementer(ILimitedResultIndex, IQueryIndex)
 class ExtendedPathIndex(PathIndex):
     """A path index stores all path components of the physical path of an
     object.
@@ -330,11 +340,12 @@ class ExtendedPathIndex(PathIndex):
              additionaly a parameter "path_level" might be passed
              to specify the level (see search())
         """
-
-        record = parseIndexRequest(request, self.id, self.query_options)
-        if record.keys == None:
+        record = IndexQuery(request, self.id, self.query_options)
+        if record.keys is None:
             return None
+        return (self.query_index(record), (self.id, ))
 
+    def query_index(self, record, resultset=None):
         level = record.get("level", 0)
         operator = record.get('operator', self.useOperator).lower()
         depth = getattr(record, 'depth', -1)  # use getattr to get 0 value
@@ -354,9 +365,8 @@ class ExtendedPathIndex(PathIndex):
             result = set_func(result, rows)
 
         if result:
-            return (result, (self.id, ))
-        else:
-            return (IISet(), (self.id, ))
+            return result
+        return IISet()
 
     def getIndexSourceNames(self):
         """ return names of indexed attributes """
