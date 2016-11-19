@@ -1,14 +1,12 @@
-import logging
-
 from App.special_dtml import DTMLFile
 from BTrees.IIBTree import IISet, IITreeSet, intersection, union, multiunion
-from BTrees.OOBTree import OOBTree
 from BTrees.OIBTree import OIBTree
-from zope.interface import implementer
-
+from BTrees.OOBTree import OOBTree
 from Products.PluginIndexes.common import safe_callable
 from Products.PluginIndexes.interfaces import ILimitedResultIndex
 from Products.PluginIndexes.PathIndex.PathIndex import PathIndex
+from zope.interface import implementer
+import logging
 
 # Forward compatibility with ZCatalog 4.0
 try:
@@ -223,8 +221,8 @@ class ExtendedPathIndex(PathIndex):
         if level < 0:
             # Search at every level, return the union of all results
             return multiunion(
-                [self.search(path, level, depth, navtree, navtree_start)
-                 for level in xrange(self._depth + 1)])
+                [self.search(path, lvl, depth, navtree, navtree_start)
+                 for lvl in xrange(self._depth + 1)])
 
         comps = filter(None, path.split('/'))
 
@@ -318,17 +316,27 @@ class ExtendedPathIndex(PathIndex):
             pathset = intersection(pathset, res)
 
             if navtree and i + level >= navtree_start:
-                depthset = union(depthset, intersection(pathset,
-                    self._index.get(None, {}).get(i + level)))
+                depthset = union(
+                    depthset, intersection(
+                        pathset,
+                        self._index.get(None, {}).get(i + level)
+                    )
+                )
 
         if depth >= 0:
             # Limit results to those that terminate within depth levels
             start = len(comps) - 1
             if navtree:
                 start = max(start, (navtree_start - level))
-            depthset = multiunion(filter(None, [depthset] + [
-                intersection(pathset, self._index.get(None, {}).get(i + level))
-                for i in xrange(start, start + depth + 1)]))
+            depthset = multiunion(
+                filter(None, [depthset] + [
+                    intersection(
+                        pathset,
+                        self._index.get(None, {}).get(i + level)
+                    )
+                    for i in xrange(start, start + depth + 1)
+                ])
+            )
 
         if navtree or depth >= 0:
             return depthset
@@ -377,8 +385,10 @@ manage_addExtendedPathIndexForm = DTMLFile('dtml/addExtendedPathIndex',
                                            globals())
 
 
-def manage_addExtendedPathIndex(self, id, extra=None, REQUEST=None,
-                                RESPONSE=None, URL3=None):
+def manage_addExtendedPathIndex(
+        self, id, extra=None, REQUEST=None,
+        RESPONSE=None, URL3=None):
     """Add an extended path index"""
-    return self.manage_addIndex(id, 'ExtendedPathIndex', extra=extra,
-                REQUEST=REQUEST, RESPONSE=RESPONSE, URL1=URL3)
+    return self.manage_addIndex(
+        id, 'ExtendedPathIndex', extra=extra,
+        REQUEST=REQUEST, RESPONSE=RESPONSE, URL1=URL3)

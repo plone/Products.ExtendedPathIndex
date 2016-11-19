@@ -1,7 +1,6 @@
-import unittest
-
 from BTrees.IIBTree import IISet
 from BTrees.IIBTree import intersection
+import unittest
 
 
 class Dummy:
@@ -261,9 +260,11 @@ class TestExtendedPathIndex(unittest.TestCase):
             res = self._index._apply_index(dict(
                 path=dict(query=path, level=level)))
             lst = list(res[0].keys())
-            self.assertEqual(lst, results,
+            self.assertEqual(
+                lst, results,
                 '%s != %s Failed on %s level %s' % (
-                    lst, results, path, level))
+                    lst, results, path, level)
+            )
 
     def testPhysicalPathOptimization(self):
         self._populateIndex()
