@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-version = '3.2.0.dev0'
+version = '4.0.0.dev0'
 
 setup(
     name='Products.ExtendedPathIndex',
@@ -32,9 +32,9 @@ setup(
     zip_safe=False,
     install_requires=[
         'setuptools',
-        'AccessControl',
-        'transaction',
-        'ZODB3',
-        'Zope2 >= 2.13.0a3',
+        'BTrees',
+        'Products.ZCatalog',
+        'Zope2',
+        'zope.interface',
     ],
-    )
+)
