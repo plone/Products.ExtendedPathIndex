@@ -6,8 +6,10 @@ setup(
     name='Products.ExtendedPathIndex',
     version=version,
     description="Zope catalog index for paths",
-    long_description=(open("README.txt").read() + "\n" + \
-                      open("CHANGES.txt").read()),
+    long_description=(
+        open("README.rst").read() + "\n" +
+        open("CHANGES.rst").read()
+    ),
     classifiers=[
         "Environment :: Web Environment",
         "Framework :: Plone",
@@ -20,7 +22,7 @@ setup(
         "Programming Language :: Python",
         "Programming Language :: Python :: 2.6",
         "Programming Language :: Python :: 2.7",
-      ],
+    ],
     keywords='Zope catalog index',
     author='Plone Foundation',
     author_email='plone-developers@lists.sourceforge.net',
@@ -32,9 +34,10 @@ setup(
     zip_safe=False,
     install_requires=[
         'setuptools',
-        'AccessControl',
         'transaction',
+        'Products.ZCatalog',
         'ZODB3',
         'Zope2 >= 2.13.0a3',
+        'zope.interface',
     ],
-    )
+)

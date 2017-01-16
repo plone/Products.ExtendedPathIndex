@@ -1,0 +1,11 @@
+language: python
+python:
+- 2.7
+sudo: false
+cache:
+  directories:
+  - eggs
+install:
+- pip install zc.buildout
+- buildout -N -t 3
+script: bin/test
