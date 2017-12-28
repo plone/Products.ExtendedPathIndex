@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-version = '3.2.1.dev0'
+version = '3.3.dev0'
 
 setup(
     name='Products.ExtendedPathIndex',
@@ -18,8 +18,10 @@ setup(
         "License :: OSI Approved :: GNU General Public License (GPL)",
         "Operating System :: OS Independent",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 2.6",
         "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3.4",
+        "Programming Language :: Python :: 3.5",
+        "Programming Language :: Python :: 3.6",
       ],
     keywords='Zope catalog index',
     author='Plone Foundation',
@@ -33,6 +35,8 @@ setup(
     install_requires=[
         'setuptools',
         'AccessControl',
+        'Products.ZCatalog',
+        'six',
         'transaction',
         'ZODB3',
         'Zope2 >= 2.13.0a3',
