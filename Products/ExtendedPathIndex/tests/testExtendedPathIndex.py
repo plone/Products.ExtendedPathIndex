@@ -250,7 +250,7 @@ class TestExtendedPathIndex(unittest.TestCase):
         self._populateIndex()
         tests = [
             # path, level, expected results
-            ('/', 0, range(1, 19)),
+            ('/', 0, list(range(1, 19))),
             ('/aa', 0, [2, 3, 4, 5, 6, 7, 8, 9]),
             ('/aa/aa', 0, [3, 4]),
             ('/aa/bb', 0, [5, 6, 7, 9]),
@@ -286,8 +286,8 @@ class TestExtendedPathIndex(unittest.TestCase):
             ('/', 0, False, []),  # Depth Zero tests
             ('/aa', 0, False, [8]),
             ('/aa/aa', 0, False, []),
-            ('/', -1, False, range(1, 19)),  # Depth -1
-            ('/aa', -1, False, range(1, 19)),  # Should assume that all
+            ('/', -1, False, list(range(1, 19))),  # Depth -1
+            ('/aa', -1, False, list(range(1, 19))),  # Should assume that all
                                                # paths are relevant
             ((('aa/aa', 1), ), -1, False, [4, 14]),  # A (path, level) tuple,
                                                      # relative search

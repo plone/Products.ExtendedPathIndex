@@ -1,14 +1,13 @@
-import logging
-
 from App.special_dtml import DTMLFile
 from BTrees.IIBTree import IISet, IITreeSet, intersection, union, multiunion
-from BTrees.OOBTree import OOBTree
 from BTrees.OIBTree import OIBTree
-from zope.interface import implementer
-
+from BTrees.OOBTree import OOBTree
 from Products.PluginIndexes.common import safe_callable
 from Products.PluginIndexes.interfaces import ILimitedResultIndex
 from Products.PluginIndexes.PathIndex.PathIndex import PathIndex
+from six import string_types
+from zope.interface import implementer
+import logging
 
 # Forward compatibility with ZCatalog 4.0
 try:
@@ -71,7 +70,8 @@ class ExtendedPathIndex(PathIndex):
 
         if isinstance(attrs, str):
             attrs = attrs.split(',')
-        attrs = filter(None, [a.strip() for a in attrs])
+        attrs = [a.strip() for a in attrs]
+        attrs = [a for a in attrs if a]
 
         if attrs:
             # We only index the first attribute so snip off the rest
@@ -108,7 +108,7 @@ class ExtendedPathIndex(PathIndex):
 
         if isinstance(path, (list, tuple)):
             path = '/' + '/'.join(path[1:])
-        comps = filter(None, path.split('/'))
+        comps = [p for p in path.split('/') if p]
 
         # Make sure we reindex properly when path change
         old_path = self._unindex.get(docid, _marker)
@@ -153,7 +153,7 @@ class ExtendedPathIndex(PathIndex):
                 return
 
         # There is an assumption that paths start with /
-        comps = filter(None, old_value.split('/'))
+        comps = [p for p in old_value.split('/') if p]
 
         def unindex(comp, level, docid=docid):
             index_comp = self._index[comp]
@@ -214,7 +214,7 @@ class ExtendedPathIndex(PathIndex):
         that level and up will be included in the resultset.
 
         """
-        if isinstance(path, basestring):
+        if isinstance(path, string_types):
             level = default_level
         else:
             level = int(path[1])
@@ -224,9 +224,9 @@ class ExtendedPathIndex(PathIndex):
             # Search at every level, return the union of all results
             return multiunion(
                 [self.search(path, level, depth, navtree, navtree_start)
-                 for level in xrange(self._depth + 1)])
+                 for level in range(self._depth + 1)])
 
-        comps = filter(None, path.split('/'))
+        comps = [p for p in path.split('/') if p]
 
         if navtree and depth == -1:  # Navtrees don't do recursive
             depth = 1
@@ -274,10 +274,10 @@ class ExtendedPathIndex(PathIndex):
         # There is an assumption about all indexed values having the
         # same common base path
         if level == 0:
-            indexpath = list(filter(None, self.getPhysicalPath()))
+            indexpath = [p for p in self.getPhysicalPath() if p]
             minlength = min(len(indexpath), len(comps))
             # Truncate path to first different element
-            for i in xrange(minlength):
+            for i in range(minlength):
                 if indexpath[i] != comps[i]:
                     break
                 level += 1
@@ -326,9 +326,11 @@ class ExtendedPathIndex(PathIndex):
             start = len(comps) - 1
             if navtree:
                 start = max(start, (navtree_start - level))
-            depthset = multiunion(filter(None, [depthset] + [
+            depthset = [depthset] + [
                 intersection(pathset, self._index.get(None, {}).get(i + level))
-                for i in xrange(start, start + depth + 1)]))
+                for i in range(start, start + depth + 1)
+            ]
+            depthset = multiunion([d for d in depthset if d])
 
         if navtree or depth >= 0:
             return depthset
