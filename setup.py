@@ -33,11 +33,10 @@ setup(
     zip_safe=False,
     install_requires=[
         'setuptools',
-        'AccessControl',
         'Products.ZCatalog',
         'six',
-        'transaction',
         'ZODB3',
         'Zope2 >= 2.13.0a3',
+        'zope.interface',
     ],
     )

@@ -1,0 +1,4 @@
+[tool.dependencychecker]
+"ZODB3" = ['BTrees']
+"Products.ZCatalog" = ['Products.PluginIndexes']
+"Zope2" = ['App']
