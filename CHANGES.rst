@@ -14,8 +14,8 @@ New features:
 
 Bug fixes:
 
-- *add item here*
-
+- Fix dependencies defined in setup.py.
+  [gforcada]
 
 3.3.0 (2018-01-17)
 ------------------

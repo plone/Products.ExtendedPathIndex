@@ -1,6 +1,3 @@
-import AccessControl  # here to avoid cyclic import
-AccessControl  # pyflakes
-
 import unittest
 
 from BTrees.IIBTree import IISet
