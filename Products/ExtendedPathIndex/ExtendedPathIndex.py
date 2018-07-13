@@ -8,6 +8,7 @@ from Products.PluginIndexes.PathIndex.PathIndex import PathIndex
 from six import string_types
 from zope.interface import implementer
 import logging
+import plone.api
 
 # Forward compatibility with ZCatalog 4.0
 try:
