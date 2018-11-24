@@ -1,13 +1,16 @@
 from setuptools import setup, find_packages
 
-version = '3.3.2.dev0'
+version = '3.4.0.dev0'
 
 setup(
     name='Products.ExtendedPathIndex',
     version=version,
     description="Zope catalog index for paths",
-    long_description=(open("README.rst").read() + "\n" + \
-                      open("CHANGES.rst").read()),
+    long_description=(
+        open("README.rst").read() +
+        "\n" +
+        open("CHANGES.rst").read()
+    ),
     classifiers=[
         "Environment :: Web Environment",
         "Framework :: Plone",
@@ -19,11 +22,9 @@ setup(
         "Operating System :: OS Independent",
         "Programming Language :: Python",
         "Programming Language :: Python :: 2.7",
-        "Programming Language :: Python :: 3.4",
-        "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
-      ],
+    ],
     keywords='Zope catalog index',
     author='Plone Foundation',
     author_email='plone-developers@lists.sourceforge.net',
@@ -41,4 +42,4 @@ setup(
         'Zope2 >= 2.13.0a3',
         'zope.interface',
     ],
-    )
+)

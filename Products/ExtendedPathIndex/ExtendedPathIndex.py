@@ -53,6 +53,7 @@ class ExtendedPathIndex(PathIndex):
     )
 
     indexed_attrs = None
+    multi_valued = False
     query_options = ("query", "level", "operator",
                      "depth", "navtree", "navtree_start")
 
@@ -62,8 +63,10 @@ class ExtendedPathIndex(PathIndex):
 
         if isinstance(extra, dict):
             attrs = extra.get('indexed_attrs', None)
+            self.multi_valued = extra.get('multi_valued', False)
         else:
             attrs = getattr(extra, 'indexed_attrs', None)
+            self.multi_valued = getattr(extra, 'multi_valued', False)
 
         if attrs is None:
             return
@@ -245,7 +248,7 @@ class ExtendedPathIndex(PathIndex):
                 # Optimized absolute path navtree and breadcrumbs cases
                 result = []
                 add = lambda x: x is not None and result.append(x)
-                if depth == 1:
+                if depth == 1 and not self.multi_valued:
                     # Navtree case, all sibling elements along the path
                     convert = multiunion
                     index = self._index_parents
@@ -261,7 +264,7 @@ class ExtendedPathIndex(PathIndex):
 
             if not path.startswith('/'):
                 path = '/' + path
-            if depth == 0:
+            if depth == 0 and not self.multi_valued:
                 # Specific object search
                 res = self._index_items.get(path)
                 return res and IISet([res]) or IISet()

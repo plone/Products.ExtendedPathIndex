@@ -24,6 +24,36 @@ Features
 
 - Can construct a navigation tree with a single catalog query
 
+Configuration
+=============
+
+In a GenericSetup profile, provide th following snippet to create an index::
+
+  <index
+      meta_type="ExtendedPathIndex"
+      name="my_path">
+    <extra
+        name="indexed_attrs"
+        value="my_path"
+    />
+  </index>
+
+For multi valued paths, provide an extra::
+
+  <index
+      meta_type="ExtendedPathIndex"
+      name="my_path">
+    <extra
+        name="indexed_attrs"
+        value="my_path"
+    />
+    <extra
+        name="multi_valued"
+        value="True"
+    />
+  </index>
+
+
 Usage
 =====
 
@@ -32,6 +62,7 @@ Usage
 
 ``catalog(path=dict(query='some/path', depth=0))``
   search for the object with the given path.
+  For multi valued paths, multiple objects are returned.
 
 ``catalog(path=dict(query='some/path', depth=2))``
   search for all objects below some/path but only down to a depth of 2
@@ -58,7 +89,7 @@ Usage
   lower level in the portal than the start parameter would allow.
 
 ``catalog(path=dict(query='some/path', level=2))``
-  search for all objects whose path contains some/path at level 2. This 
+  search for all objects whose path contains some/path at level 2. This
   includes paths like /foo/bar/some/path and /spam/eggs/some/path, plus all
   children of those paths.
 
