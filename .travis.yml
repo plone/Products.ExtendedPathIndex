@@ -1,15 +1,14 @@
 language: python
 sudo: false
+dist: xenial
 python:
     - 2.7
-    - 3.4
-    - 3.5
     - 3.6
+    - 3.7
 install:
-    - pip install six==1.10.0  # force here to avoid conflict with zc.recipe.testrunner
-    - pip install -U setuptools==33.1.1
+    - pip install -U setuptools pip
     - pip install zc.buildout
-    - buildout bootstrap
+    - buildout annotate
     - buildout
 script:
     - bin/test -v1
