@@ -8,30 +8,23 @@ Changelog
 
 .. towncrier release notes start
 
-
-3.4.1 (unreleased)
+3.4.0 (2018-12-14)
 ------------------
-
-Breaking changes:
-
-- *add item here*
 
 New features:
 
-- *add item here*
 
-Bug fixes:
-
-- *add item here*
+- Support allow multi value results for "virtual" paths. [jensens] (#7)
 
 
-3.4.0 (2018-12-14)
+3.3.1 (2018-09-23)
 ------------------
 
 Bug fixes:
 
 - Fix dependencies defined in setup.py.
   [gforcada]
+
 
 3.3.0 (2018-01-17)
 ------------------
