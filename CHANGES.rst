@@ -8,6 +8,15 @@ Changelog
 
 .. towncrier release notes start
 
+3.4.1 (2018-12-14)
+------------------
+
+Bug fixes:
+
+
+- Rerelease without changes to update the changelog properly. (#7)
+
+
 3.4.0 (2018-12-14)
 ------------------
 
