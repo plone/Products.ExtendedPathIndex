@@ -2,7 +2,6 @@ from App.special_dtml import DTMLFile
 from BTrees.IIBTree import IISet, IITreeSet, intersection, union, multiunion
 from BTrees.OIBTree import OIBTree
 from BTrees.OOBTree import OOBTree
-from Products.PluginIndexes.common import safe_callable
 from Products.PluginIndexes.interfaces import ILimitedResultIndex
 from Products.PluginIndexes.PathIndex.PathIndex import PathIndex
 from six import string_types
@@ -13,10 +12,12 @@ import logging
 try:
     from Products.ZCatalog.query import IndexQuery
     from Products.PluginIndexes.interfaces import IQueryIndex
+    from Products.PluginIndexes.util import safe_callable
 except ImportError:
     from zope.interface import Interface
     from Products.PluginIndexes.common.util import \
         parseIndexRequest as IndexQuery
+    from Products.PluginIndexes.common import safe_callable
     IQueryIndex = Interface
 
 
