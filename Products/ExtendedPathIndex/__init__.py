@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 def initialize(context):
     from Products.ExtendedPathIndex.ExtendedPathIndex import ExtendedPathIndex
     from Products.ExtendedPathIndex.ExtendedPathIndex import \

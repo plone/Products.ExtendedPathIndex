@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from App.special_dtml import DTMLFile
 from BTrees.IIBTree import IISet
 from BTrees.IIBTree import IITreeSet
