@@ -1,5 +1,9 @@
 from App.special_dtml import DTMLFile
-from BTrees.IIBTree import IISet, IITreeSet, intersection, union, multiunion
+from BTrees.IIBTree import IISet
+from BTrees.IIBTree import IITreeSet
+from BTrees.IIBTree import intersection
+from BTrees.IIBTree import multiunion
+from BTrees.IIBTree import union
 from BTrees.OIBTree import OIBTree
 from BTrees.OOBTree import OOBTree
 from Products.PluginIndexes.common import safe_callable
@@ -7,7 +11,9 @@ from Products.PluginIndexes.interfaces import ILimitedResultIndex
 from Products.PluginIndexes.PathIndex.PathIndex import PathIndex
 from six import string_types
 from zope.interface import implementer
+
 import logging
+
 
 # Forward compatibility with ZCatalog 4.0
 try:
