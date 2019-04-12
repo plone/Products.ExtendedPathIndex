@@ -7,7 +7,6 @@ from BTrees.IIBTree import multiunion
 from BTrees.IIBTree import union
 from BTrees.OIBTree import OIBTree
 from BTrees.OOBTree import OOBTree
-from Products.PluginIndexes.common import safe_callable
 from Products.PluginIndexes.interfaces import ILimitedResultIndex
 from Products.PluginIndexes.PathIndex.PathIndex import PathIndex
 from six import string_types
@@ -26,6 +25,10 @@ except ImportError:
         parseIndexRequest as IndexQuery
     IQueryIndex = Interface
 
+try:
+    from Products.PluginIndexes.util import safe_callable
+except ImportError:
+    from Products.PluginIndexes.common import safe_callable
 
 _marker = []
 logger = logging.getLogger('ExtendedPathIndex')
