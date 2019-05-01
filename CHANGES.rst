@@ -8,6 +8,16 @@ Changelog
 
 .. towncrier release notes start
 
+3.4.2 (2019-05-01)
+------------------
+
+Bug fixes:
+
+
+- Avoid a deprecation warning.
+  [gforcada] (#10)
+
+
 3.4.1 (2018-12-14)
 ------------------
 
