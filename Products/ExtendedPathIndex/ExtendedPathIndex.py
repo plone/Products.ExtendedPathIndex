@@ -1,31 +1,26 @@
 from App.special_dtml import DTMLFile
-from BTrees.IIBTree import IISet, IITreeSet, intersection, union, multiunion
+from BTrees.IIBTree import IISet
+from BTrees.IIBTree import IITreeSet
+from BTrees.IIBTree import intersection
+from BTrees.IIBTree import multiunion
+from BTrees.IIBTree import union
 from BTrees.OIBTree import OIBTree
 from BTrees.OOBTree import OOBTree
 from Products.PluginIndexes.interfaces import ILimitedResultIndex
+from Products.ZCatalog.query import IndexQuery
 from Products.PluginIndexes.PathIndex.PathIndex import PathIndex
+from Products.PluginIndexes.util import safe_callable
 from six import string_types
 from zope.interface import implementer
-import logging
 
-# Forward compatibility with ZCatalog 4.0
-try:
-    from Products.ZCatalog.query import IndexQuery
-    from Products.PluginIndexes.interfaces import IQueryIndex
-    from Products.PluginIndexes.util import safe_callable
-except ImportError:
-    from zope.interface import Interface
-    from Products.PluginIndexes.common.util import \
-        parseIndexRequest as IndexQuery
-    from Products.PluginIndexes.common import safe_callable
-    IQueryIndex = Interface
+import logging
 
 
 _marker = []
 logger = logging.getLogger('ExtendedPathIndex')
 
 
-@implementer(ILimitedResultIndex, IQueryIndex)
+@implementer(ILimitedResultIndex)
 class ExtendedPathIndex(PathIndex):
     """A path index stores all path components of the physical path of an
     object.
