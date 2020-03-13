@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-version = '3.4.3.dev0'
+version = '4.0.0.dev0'
 
 setup(
     name='Products.ExtendedPathIndex',
@@ -15,10 +15,9 @@ setup(
         "Development Status :: 5 - Production/Stable",
         "Environment :: Web Environment",
         "Framework :: Plone",
-        "Framework :: Plone :: 5.0",
-        "Framework :: Plone :: 5.1",
         "Framework :: Plone :: 5.2",
-        "Framework :: Zope2",
+        "Framework :: Plone :: 6.0",
+        "Framework :: Zope",
         "Framework :: Zope :: 4",
         "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
         "Operating System :: OS Independent",
@@ -26,6 +25,7 @@ setup(
         "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
     ],
     keywords='Zope catalog index',
     author='Plone Foundation',
@@ -38,10 +38,7 @@ setup(
     zip_safe=False,
     install_requires=[
         'setuptools',
-        'Products.ZCatalog',
         'six',
-        'ZODB3',
-        'Zope2 >= 2.13.0a3',
-        'zope.interface',
+        'Zope',
     ],
 )
