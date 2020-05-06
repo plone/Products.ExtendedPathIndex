@@ -8,6 +8,21 @@ Changelog
 
 .. towncrier release notes start
 
+4.0.0 (2020-05-06)
+------------------
+
+Breaking changes:
+
+
+- Drop compatibility for ZCatalog < 4 [jensens] (#15)
+
+
+Bug fixes:
+
+
+- Fix IRO of EPI. [jensens] (#15)
+
+
 3.4.2 (2019-05-01)
 ------------------
 
