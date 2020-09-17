@@ -41,5 +41,6 @@ setup(
         'setuptools',
         'six',
         'Zope',
+        'Products.ZCatalog',
     ],
 )
