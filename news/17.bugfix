@@ -1,4 +1,0 @@
-- unpin zc.buildout
-- pin versions to Zope 4 (otherwise Python 2.7 version cannot be built anymore)
-- update tox.ini to align with setup classifiers
-- add `Products.ZCatalog` to setup.py's `install_requires`, as it is no longer part of Zope core
