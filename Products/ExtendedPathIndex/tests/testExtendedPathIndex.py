@@ -276,7 +276,7 @@ class TestExtendedPathIndex(unittest.TestCase):
             self.assertEqual(
                 lst,
                 results,
-                "{} != {} Failed on {} level {}".format(lst, results, path, level),
+                f"{lst} != {results} Failed on {path} level {level}",
             )
 
     def testPhysicalPathOptimization(self):
