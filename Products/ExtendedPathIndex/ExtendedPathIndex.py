@@ -10,7 +10,6 @@ from Products.PluginIndexes.interfaces import ILimitedResultIndex
 from Products.PluginIndexes.PathIndex.PathIndex import PathIndex
 from Products.PluginIndexes.util import safe_callable
 from Products.ZCatalog.query import IndexQuery
-from six import string_types
 from zope.interface import implementer
 
 import logging
@@ -253,7 +252,7 @@ class ExtendedPathIndex(PathIndex):
             if navtree:
                 # Optimized absolute path navtree and breadcrumbs cases
                 result = []
-                add = lambda x: x is not None and result.append(x)
+                add = lambda x: x is not None and result.append(x)  # noqa: E731
                 if depth == 1 and not self.multi_valued:
                     # Navtree case, all sibling elements along the path
                     convert = multiunion
