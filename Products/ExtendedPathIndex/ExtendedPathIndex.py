@@ -213,7 +213,7 @@ class ExtendedPathIndex(PathIndex):
         that level and up will be included in the resultset.
 
         """
-        if isinstance(path, string_types):
+        if isinstance(path, str):
             level = default_level
         else:
             level = int(path[1])

@@ -1,7 +1,7 @@
 import unittest
 
 
-class MockItem(object):
+class MockItem:
 
     def getId(self):
         return 'mock'
@@ -40,7 +40,7 @@ class IndexedAttrsTests(unittest.TestCase):
 
     def testExtraAsRecord(self):
         # 'extra' can either be an instance
-        class Record(object):
+        class Record:
             def __init__(self, **kw):
                 self.__dict__.update(kw)
 

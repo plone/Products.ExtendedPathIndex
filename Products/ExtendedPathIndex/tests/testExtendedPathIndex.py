@@ -240,7 +240,7 @@ class TestExtendedPathIndex(unittest.TestCase):
             lst = list(res[0].keys())
             self.assertEqual(
                 lst, results,
-                '%s != %s Failed on %s start %s' % (
+                '{} != {} Failed on {} start {}'.format(
                     lst, results, path, navtree_start))
 
     def testNegativeDepthQuery(self):
@@ -262,7 +262,7 @@ class TestExtendedPathIndex(unittest.TestCase):
                 path=dict(query=path, level=level)))
             lst = list(res[0].keys())
             self.assertEqual(lst, results,
-                '%s != %s Failed on %s level %s' % (
+                '{} != {} Failed on {} level {}'.format(
                     lst, results, path, level))
 
     def testPhysicalPathOptimization(self):
@@ -296,5 +296,5 @@ class TestExtendedPathIndex(unittest.TestCase):
             lst = list(res[0].keys())
             self.assertEqual(
                 lst, results,
-                '%s != %s Failed on %s depth %s navtree %s' % (
+                '{} != {} Failed on {} depth {} navtree {}'.format(
                     lst, results, path, depth, navtree))
