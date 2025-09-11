@@ -2,17 +2,13 @@ from setuptools import find_packages
 from setuptools import setup
 
 
-version = '4.0.2.dev0'
+version = "4.0.2.dev0"
 
 setup(
-    name='Products.ExtendedPathIndex',
+    name="Products.ExtendedPathIndex",
     version=version,
     description="Zope catalog index for paths",
-    long_description=(
-        open("README.rst").read() +
-        "\n" +
-        open("CHANGES.rst").read()
-    ),
+    long_description=(open("README.rst").read() + "\n" + open("CHANGES.rst").read()),
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Environment :: Web Environment",
@@ -30,19 +26,19 @@ setup(
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
     ],
-    keywords='Zope catalog index',
-    author='Plone Foundation',
-    author_email='plone-developers@lists.sourceforge.net',
-    url='https://github.com/plone/Products.ExtendedPathIndex',
-    license='GPL version 2',
+    keywords="Zope catalog index",
+    author="Plone Foundation",
+    author_email="plone-developers@lists.sourceforge.net",
+    url="https://github.com/plone/Products.ExtendedPathIndex",
+    license="GPL version 2",
     packages=find_packages(),
-    namespace_packages=['Products'],
+    namespace_packages=["Products"],
     include_package_data=True,
     zip_safe=False,
     install_requires=[
-        'setuptools',
-        'six',
-        'Zope',
-        'Products.ZCatalog',
+        "setuptools",
+        "six",
+        "Zope",
+        "Products.ZCatalog",
     ],
 )

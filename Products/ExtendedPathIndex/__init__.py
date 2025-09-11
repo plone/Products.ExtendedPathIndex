@@ -7,8 +7,8 @@ def initialize(context):
 
     context.registerClass(
         ExtendedPathIndex,
-        permission='Add Pluggable Index',
-        constructors=(manage_addExtendedPathIndexForm,
-                      manage_addExtendedPathIndex),
-        icon='www/index.gif',
-        visibility=None)
+        permission="Add Pluggable Index",
+        constructors=(manage_addExtendedPathIndexForm, manage_addExtendedPathIndex),
+        icon="www/index.gif",
+        visibility=None,
+    )

@@ -17,7 +17,7 @@ import logging
 
 
 _marker = []
-logger = logging.getLogger('ExtendedPathIndex')
+logger = logging.getLogger("ExtendedPathIndex")
 
 
 @implementer(ILimitedResultIndex)
@@ -44,31 +44,28 @@ class ExtendedPathIndex(PathIndex):
 
     meta_type = "ExtendedPathIndex"
 
-    manage_options = (
-        {'label': 'Settings', 'action': 'manage_main'},
-    )
+    manage_options = ({"label": "Settings", "action": "manage_main"},)
 
     indexed_attrs = None
     multi_valued = False
-    query_options = ("query", "level", "operator",
-                     "depth", "navtree", "navtree_start")
+    query_options = ("query", "level", "operator", "depth", "navtree", "navtree_start")
 
     def __init__(self, id, extra=None, caller=None):
-        """ ExtendedPathIndex supports indexed_attrs """
+        """ExtendedPathIndex supports indexed_attrs"""
         PathIndex.__init__(self, id, caller)
 
         if isinstance(extra, dict):
-            attrs = extra.get('indexed_attrs', None)
-            self.multi_valued = extra.get('multi_valued', False)
+            attrs = extra.get("indexed_attrs", None)
+            self.multi_valued = extra.get("multi_valued", False)
         else:
-            attrs = getattr(extra, 'indexed_attrs', None)
-            self.multi_valued = getattr(extra, 'multi_valued', False)
+            attrs = getattr(extra, "indexed_attrs", None)
+            self.multi_valued = getattr(extra, "multi_valued", False)
 
         if attrs is None:
             return
 
         if isinstance(attrs, str):
-            attrs = attrs.split(',')
+            attrs = attrs.split(",")
         attrs = [a.strip() for a in attrs]
         attrs = [a for a in attrs if a]
 
@@ -82,7 +79,7 @@ class ExtendedPathIndex(PathIndex):
         self._index_items = OIBTree()
 
     def index_object(self, docid, obj, threshold=100):
-        """ hook for (Z)Catalog """
+        """hook for (Z)Catalog"""
 
         # PathIndex first checks for an attribute matching its id and
         # falls back to getPhysicalPath only when failing to get one.
@@ -97,8 +94,10 @@ class ExtendedPathIndex(PathIndex):
                 path = path()
 
             if not isinstance(path, (str, tuple)):
-                raise TypeError('path value must be string or tuple '
-                                'of strings: (%r, %s)' % (index, repr(path)))
+                raise TypeError(
+                    "path value must be string or tuple "
+                    "of strings: (%r, %s)" % (index, repr(path))
+                )
         else:
             try:
                 path = obj.getPhysicalPath()
@@ -106,8 +105,8 @@ class ExtendedPathIndex(PathIndex):
                 return 0
 
         if isinstance(path, (list, tuple)):
-            path = '/' + '/'.join(path[1:])
-        comps = [p for p in path.split('/') if p]
+            path = "/" + "/".join(path[1:])
+        comps = [p for p in path.split("/") if p]
 
         # Make sure we reindex properly when path change
         old_path = self._unindex.get(docid, _marker)
@@ -128,7 +127,7 @@ class ExtendedPathIndex(PathIndex):
         self.insertEntry(None, docid, len(comps) - 1)
 
         # Add full-path indexes, to optimize certain edge cases
-        parent_path = '/' + '/'.join(comps[:-1])
+        parent_path = "/" + "/".join(comps[:-1])
         parents = self._index_parents.get(parent_path, _marker)
         if parents is _marker:
             self._index_parents[parent_path] = parents = IITreeSet()
@@ -139,20 +138,21 @@ class ExtendedPathIndex(PathIndex):
         return 1
 
     def unindex_object(self, docid, _old=_marker):
-        """ hook for (Z)Catalog """
+        """hook for (Z)Catalog"""
 
         if _old is not _marker:
             old_value = _old
         else:
             old_value = self._unindex.get(docid, _marker)
             if old_value is _marker:
-                logger.log(logging.INFO,
-                           'Attempt to unindex nonexistent object with id '
-                           '%s' % docid)
+                logger.log(
+                    logging.INFO,
+                    "Attempt to unindex nonexistent object with id " "%s" % docid,
+                )
                 return
 
         # There is an assumption that paths start with /
-        comps = [p for p in old_value.split('/') if p]
+        comps = [p for p in old_value.split("/") if p]
 
         def unindex(comp, level, docid=docid):
             index_comp = self._index[comp]
@@ -170,23 +170,30 @@ class ExtendedPathIndex(PathIndex):
             unindex(None, len(comps) - 1)
 
             # Remove full-path indexes
-            parent_path = '/' + '/'.join(comps[:-1])
+            parent_path = "/" + "/".join(comps[:-1])
             parents = self._index_parents.get(parent_path, _marker)
             if parents is not _marker:
                 parents.remove(docid)
                 if not parents:
                     del self._index_parents[parent_path]
-            del self._index_items['/'.join([parent_path, comps[-1]])]
+            del self._index_items["/".join([parent_path, comps[-1]])]
         except KeyError:
-            logger.log(logging.INFO,
-                       'Attempt to unindex object with id '
-                       '%s failed' % docid)
+            logger.log(
+                logging.INFO, "Attempt to unindex object with id " "%s failed" % docid
+            )
 
         self._length.change(-1)
         del self._unindex[docid]
 
-    def search(self, path, default_level=0, depth=-1, navtree=0,
-               navtree_start=0, resultset=None):
+    def search(
+        self,
+        path,
+        default_level=0,
+        depth=-1,
+        navtree=0,
+        navtree_start=0,
+        resultset=None,
+    ):
         """
         path is either a string representing a relative URL or a part of a
         relative URL or a tuple (path, level).
@@ -222,10 +229,13 @@ class ExtendedPathIndex(PathIndex):
         if level < 0:
             # Search at every level, return the union of all results
             return multiunion(
-                [self.search(path, level, depth, navtree, navtree_start)
-                 for level in range(self._depth + 1)])
+                [
+                    self.search(path, level, depth, navtree, navtree_start)
+                    for level in range(self._depth + 1)
+                ]
+            )
 
-        comps = [p for p in path.split('/') if p]
+        comps = [p for p in path.split("/") if p]
 
         if navtree and depth == -1:  # Navtrees don't do recursive
             depth = 1
@@ -254,12 +264,12 @@ class ExtendedPathIndex(PathIndex):
                     index = self._index_items
                 # Collect all results along the path
                 for i in range(len(comps), navtree_start - 1, -1):
-                    parent_path = '/' + '/'.join(comps[:i])
+                    parent_path = "/" + "/".join(comps[:i])
                     add(index.get(parent_path))
                 return convert(result)
 
-            if not path.startswith('/'):
-                path = '/' + path
+            if not path.startswith("/"):
+                path = "/" + path
             if depth == 0 and not self.multi_valued:
                 # Specific object search
                 res = self._index_items.get(path)
@@ -292,10 +302,14 @@ class ExtendedPathIndex(PathIndex):
 
         if navtree and depth > 0:
             # Include the elements up to the matching path
-            depthset = multiunion([
-                self._index.get(None, {}).get(i, IISet())
-                for i in range(min(navtree_start, level),
-                               max(navtree_start, level) + 1)])
+            depthset = multiunion(
+                [
+                    self._index.get(None, {}).get(i, IISet())
+                    for i in range(
+                        min(navtree_start, level), max(navtree_start, level) + 1
+                    )
+                ]
+            )
 
         indexedcomps = enumerate(comps)
         if not navtree:
@@ -317,8 +331,10 @@ class ExtendedPathIndex(PathIndex):
             pathset = intersection(pathset, res)
 
             if navtree and i + level >= navtree_start:
-                depthset = union(depthset, intersection(pathset,
-                    self._index.get(None, {}).get(i + level)))
+                depthset = union(
+                    depthset,
+                    intersection(pathset, self._index.get(None, {}).get(i + level)),
+                )
 
         if depth >= 0:
             # Limit results to those that terminate within depth levels
@@ -336,22 +352,22 @@ class ExtendedPathIndex(PathIndex):
         return pathset
 
     def _apply_index(self, request, resultset=None):
-        """ hook for (Z)Catalog
-            'request' --  mapping type (usually {"path": "..." }
-             additionaly a parameter "path_level" might be passed
-             to specify the level (see search())
+        """hook for (Z)Catalog
+        'request' --  mapping type (usually {"path": "..." }
+         additionaly a parameter "path_level" might be passed
+         to specify the level (see search())
         """
         record = IndexQuery(request, self.id, self.query_options)
         if record.keys is None:
             return None
-        return (self.query_index(record), (self.id, ))
+        return (self.query_index(record), (self.id,))
 
     def query_index(self, record, resultset=None):
         level = record.get("level", 0)
-        operator = record.get('operator', self.useOperator).lower()
-        depth = getattr(record, 'depth', -1)  # use getattr to get 0 value
-        navtree = record.get('navtree', 0)
-        navtree_start = record.get('navtree_start', 0)
+        operator = record.get("operator", self.useOperator).lower()
+        depth = getattr(record, "depth", -1)  # use getattr to get 0 value
+        navtree = record.get("navtree", 0)
+        navtree_start = record.get("navtree_start", 0)
 
         # depending on the operator we use intersection of union
         if operator == "or":
@@ -361,8 +377,9 @@ class ExtendedPathIndex(PathIndex):
 
         result = None
         for k in record.keys:
-            rows = self.search(k, level, depth, navtree, navtree_start,
-                               resultset=resultset)
+            rows = self.search(
+                k, level, depth, navtree, navtree_start, resultset=resultset
+            )
             result = set_func(result, rows)
 
         if result:
@@ -370,16 +387,23 @@ class ExtendedPathIndex(PathIndex):
         return IISet()
 
     def getIndexSourceNames(self):
-        """ return names of indexed attributes """
-        attrs = self.indexed_attrs or ('getPhysicalPath', )
+        """return names of indexed attributes"""
+        attrs = self.indexed_attrs or ("getPhysicalPath",)
         return tuple(attrs)
 
-manage_addExtendedPathIndexForm = DTMLFile('dtml/addExtendedPathIndex',
-                                           globals())
+
+manage_addExtendedPathIndexForm = DTMLFile("dtml/addExtendedPathIndex", globals())
 
 
-def manage_addExtendedPathIndex(self, id, extra=None, REQUEST=None,
-                                RESPONSE=None, URL3=None):
+def manage_addExtendedPathIndex(
+    self, id, extra=None, REQUEST=None, RESPONSE=None, URL3=None
+):
     """Add an extended path index"""
-    return self.manage_addIndex(id, 'ExtendedPathIndex', extra=extra,
-                REQUEST=REQUEST, RESPONSE=RESPONSE, URL1=URL3)
+    return self.manage_addIndex(
+        id,
+        "ExtendedPathIndex",
+        extra=extra,
+        REQUEST=REQUEST,
+        RESPONSE=RESPONSE,
+        URL1=URL3,
+    )
