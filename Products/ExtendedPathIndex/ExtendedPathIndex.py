@@ -7,9 +7,9 @@ from BTrees.IIBTree import union
 from BTrees.OIBTree import OIBTree
 from BTrees.OOBTree import OOBTree
 from Products.PluginIndexes.interfaces import ILimitedResultIndex
-from Products.ZCatalog.query import IndexQuery
 from Products.PluginIndexes.PathIndex.PathIndex import PathIndex
 from Products.PluginIndexes.util import safe_callable
+from Products.ZCatalog.query import IndexQuery
 from six import string_types
 from zope.interface import implementer
 

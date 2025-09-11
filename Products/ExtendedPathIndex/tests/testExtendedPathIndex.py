@@ -1,7 +1,7 @@
-import unittest
-
 from BTrees.IIBTree import IISet
 from BTrees.IIBTree import intersection
+
+import unittest
 
 
 class Dummy:

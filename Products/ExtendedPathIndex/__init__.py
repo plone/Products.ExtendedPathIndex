@@ -1,9 +1,9 @@
 def initialize(context):
     from Products.ExtendedPathIndex.ExtendedPathIndex import ExtendedPathIndex
-    from Products.ExtendedPathIndex.ExtendedPathIndex import \
-        manage_addExtendedPathIndex
-    from Products.ExtendedPathIndex.ExtendedPathIndex import \
-        manage_addExtendedPathIndexForm
+    from Products.ExtendedPathIndex.ExtendedPathIndex import manage_addExtendedPathIndex
+    from Products.ExtendedPathIndex.ExtendedPathIndex import (
+        manage_addExtendedPathIndexForm,
+    )
 
     context.registerClass(
         ExtendedPathIndex,
