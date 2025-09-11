@@ -287,7 +287,7 @@ class TestExtendedPathIndex(unittest.TestCase):
         tests = [
             # path, depth, navtree, expected results
             ("/", 1, False, [1, 8, 16]),  # Sitemap
-            ("/", 0, True, []),  # Non-Existant
+            ("/", 0, True, []),  # non-existent
             ("/", 0, True, []),  # Breadcrumb tests
             ("/aa", 0, True, [8]),
             ("/aa/aa", 0, True, [8]),

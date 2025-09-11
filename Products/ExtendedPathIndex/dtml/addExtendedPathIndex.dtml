@@ -32,7 +32,7 @@ is defined as <em>/&lt;component1&gt;/&lt;component2&gt;/..../&lt;object_id&gt;
     </td>
     <td align="left" valign="top">
     <input type="text" name="extra.indexed_attrs:record:string" size="40" />
-    <em>Leave emtpy to retain the default behavior</em>
+    <em>Leave empty to retain the default behavior</em>
     </td>
   </tr>
 

@@ -353,7 +353,7 @@ class ExtendedPathIndex(PathIndex):
     def _apply_index(self, request, resultset=None):
         """hook for (Z)Catalog
         'request' --  mapping type (usually {"path": "..." }
-         additionaly a parameter "path_level" might be passed
+         additionally a parameter "path_level" might be passed
          to specify the level (see search())
         """
         record = IndexQuery(request, self.id, self.query_options)
