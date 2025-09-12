@@ -213,7 +213,7 @@ Bug Fixes:
 2.2 - October 7, 2005
 ---------------------
 
-- Add seperate index structures on the parent path and the full path of all
+- Add separate index structures on the parent path and the full path of all
   objects.  This significantly improves scaling for navtrees, breadcrumbs,
   and listings.
   [alecm]

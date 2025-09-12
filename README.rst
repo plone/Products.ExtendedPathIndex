@@ -56,7 +56,7 @@ An example for an index with multiple values per path element:
 Imagine to index multilingual content.
 Every item is translated and all translated items share a common unique identifier
 (this is how plone.app.multilingual works).
-Now create an indexer returing this unique identifier instead of the items ID as a path element.
+Now create an indexer returning this unique identifier instead of the items ID as a path element.
 With this it is possible to query all elements of all languages in a folder in one go
 (for an advanced usage of this pattern look at ``plone.app.multilingualindexes``).
 
