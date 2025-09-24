@@ -8,6 +8,25 @@ Changelog
 
 .. towncrier release notes start
 
+5.0.0 (2025-09-24)
+------------------
+
+Breaking changes:
+
+
+- Drop support for Plone 5.2.
+  Drop support for Python 2.
+  Require Python 3.9 or higher.
+  [gforcada, maurits]
+
+
+Internal:
+
+
+- Move distribution to src layout [gforcada] (#4217)
+- Use ``plone.meta`` to ease maintenance [gforcada]
+
+
 4.0.1 (2020-09-28)
 ------------------
 
