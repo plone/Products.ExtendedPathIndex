@@ -14,7 +14,6 @@ from zope.interface import implementer
 
 import logging
 
-
 _marker = []
 logger = logging.getLogger("ExtendedPathIndex")
 
